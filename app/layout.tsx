@@ -11,11 +11,17 @@ import './globals.css'
 
 import AuthProvider from '@/app/providers/authProvider'
 
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Articles',
   description: 'Articles',
+  twitter: {
+    title: 'Articles',
+    description: 'Articles',
+    images: 'https://og-examples.vercel.sh/api/static',
+  },
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
