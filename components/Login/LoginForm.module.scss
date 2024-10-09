@@ -1,0 +1,15 @@
+.wrapper {
+  @apply flex-center-center min-h-screen;
+
+  & .formWrapper {
+    @apply w-full max-w-md p-8 bg-white shadow-md rounded-md;
+
+    & form {
+      @apply flex flex-col gap-5;
+
+      & .btn {
+        @apply w-full;
+      }
+    }
+  }
+}

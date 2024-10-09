@@ -1,0 +1,7 @@
+.commentCard {
+  @apply bg-white p-4 rounded-lg shadow-md border min-w-72;
+
+  & .likeButtonWrapper {
+    @apply flex justify-end mb-2;
+  }
+}

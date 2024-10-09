@@ -1,0 +1,9 @@
+.commentContent {
+  & p {
+    @apply mt-2 text-gray-4;
+  }
+
+  & small {
+    @apply text-gray-4 block mt-2;
+  }
+}

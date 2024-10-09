@@ -1,0 +1,101 @@
+.button {
+  @apply border border-transparent
+  transition-all2 flex-center-center
+  rounded-full overflow-hidden cursor-pointer;
+
+  &[disabled] {
+    @apply pointer-events-none;
+  }
+
+  /* COLOR */
+  &.default {
+    @apply rounded-sm;
+  }
+
+  &.neon {
+    @apply bg-neon-glow text-gray-dark;
+
+    &:hover {
+      @apply hover:bg-neon-light hover:border-neon-light;
+    }
+
+    &:active {
+      @apply bg-neon-dark text-white;
+    }
+  }
+
+  &.white {
+    @apply bg-white text-gray-dark;
+
+    &:hover {
+      @apply hover:bg-gray-5 hover:border-gray-5;
+    }
+
+    &:active {
+      @apply bg-gray-2 text-white;
+    }
+  }
+
+  &.purple {
+    @apply bg-purple-planet text-gray-dark;
+
+    &:hover {
+      @apply hover:bg-purple-light hover:border-purple-light hover:text-gray-dark;
+    }
+
+    &:active {
+      @apply bg-purple-dark border-transparent text-white;
+    }
+  }
+
+  &.grey {
+    @apply bg-gray-dark text-white;
+
+    &:hover {
+      @apply hover:bg-gray-2 hover:border-gray-2;
+    }
+
+    &:active {
+      @apply bg-gray-2 text-white;
+    }
+  }
+
+  /* DISABLED */
+  &[disabled] {
+    @apply bg-gray-5 border-gray-5 text-gray-4;
+  }
+
+  /* SIZE */
+  &.xxl {
+    @apply h-[4.5rem] px-12 text-s_sh1;
+  }
+
+  &.xl {
+    @apply h-[4rem] px-9 text-s_body;
+  }
+
+  &.l {
+    @apply h-[3rem] px-9 text-s_text;
+  }
+
+  &.m {
+    @apply h-[2.375rem] px-6 text-s_caption;
+  }
+
+  &.s {
+    @apply h-[2rem] px-4 text-s_button;
+  }
+
+  &.xs {
+    @apply h-[1.875rem] px-3 text-s_captionS;
+  }
+
+  /* TYPE */
+  &.square {
+    @apply flex-center-center aspect-square px-0 rounded-lg;
+  }
+
+  &.circle {
+    @apply flex-center-center aspect-square px-0;
+  }
+}

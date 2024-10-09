@@ -1,0 +1,42 @@
+.input {
+  @apply transition-all2;
+
+  & label {
+    @apply relative flex flex-col gap-[0.875rem] text-s_text;
+
+    & .wrapper {
+      @apply relative rounded-lg;
+
+      & input {
+        @apply w-full border border-transparent transition-colors
+        bg-gray-3 text-white text-s_text py-4 px-5 rounded-lg placeholder-gray-4;
+
+        &:focus {
+          outline: none;
+        }
+
+        &:-webkit-autofill {
+          -webkit-text-fill-color: white !important;
+          transition: background-color 5000s ease-in-out 0s;
+        }
+
+        &:-webkit-autofill:hover,
+        &:-webkit-autofill:focus,
+        &:-webkit-autofill:active {
+          -webkit-text-fill-color: white !important;
+          transition: background-color 5000s ease-in-out 0s;
+        }
+      }
+    }
+
+    & .error {
+      @apply text-red animate-scaleIn absolute bottom-[-25px];
+    }
+  }
+
+  &.error {
+    & .wrapper input {
+      outline: solid theme('colors.red') 2px;
+    }
+  }
+}

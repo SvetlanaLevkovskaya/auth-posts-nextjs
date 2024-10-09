@@ -1,0 +1,11 @@
+.block {
+  @apply h-full flex-center-center flex-col gap-5;
+
+  & .title {
+    @apply text-s_h4;
+  }
+
+  & .subtitle {
+    @apply text-s_body text-gray-4;
+  }
+}
