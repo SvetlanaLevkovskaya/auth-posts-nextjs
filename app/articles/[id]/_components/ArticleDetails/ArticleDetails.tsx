@@ -9,8 +9,6 @@ import { Article, Comment } from '@/types'
 export const ArticleDetails = ({ article, comments }: { article: Article; comments: Comment[] }) => {
   if (!article) return null
 
-  console.log('comments', comments)
-
   return (
     <div className='flex flex-col gap-6 w-full'>
       <div className="container mx-auto p-4">
@@ -26,7 +24,7 @@ export const ArticleDetails = ({ article, comments }: { article: Article; commen
       </div>
 
       <div className="container mx-auto p-4 mt-8 bg-gray-1 rounded-lg shadow-md">
-        <Comments comments={comments} />
+        <Comments initialComments={comments} articleId={article.id}/>
       </div>
     </div>
   )

@@ -17,10 +17,10 @@ export const CommentCard: FC<CommentCardProps> = ({ comment }) => {
       <div className="flex justify-end mb-2">
         <LikeButton commentId={comment.id} />
       </div>
-      <CommentContent body={comment.content} email={comment.author.username} />
+      <CommentContent content={comment.content} username={comment?.author?.username} />
       <CommentIcons commentId={comment.id} />
 
-      {comment.children.length > 0 && (
+      {comment?.children?.length > 0 && (
         <ul>
           {comment.children.map((childComment) => (
             <CommentCard key={childComment.id} comment={childComment} />

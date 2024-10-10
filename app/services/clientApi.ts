@@ -1,5 +1,7 @@
-import axios from 'axios';
-import { ApiRoutes } from '@/lib/api/routes';
+import axios from 'axios'
+
+import { ApiRoutes } from '@/lib/api/routes'
+
 
 export const handleApiError = (error: unknown): string => {
   if (axios.isAxiosError(error)) {
@@ -67,5 +69,10 @@ export const apiClientService = {
     return instanceAxios.get(`${ ApiRoutes.articles }/${ articleId }/comments/`, {
       headers: { Authorization: `Bearer ${ token }` },
     });
+  },
+  addCommentToArticle: async (token: string, articleId: number, data: { content: string; parent?: number | null }) => {
+    return instanceAxios.post(`${ApiRoutes.articles}/${articleId}/comments/`, data, {
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    })
   },
 }
