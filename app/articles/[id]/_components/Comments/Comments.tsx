@@ -2,9 +2,8 @@
 
 import { FC, useEffect, useState } from 'react'
 
-
-import { Comment } from '@/types'
 import { CommentCard } from '@/app/articles/[id]/_components'
+import { Comment } from '@/types'
 
 
 type CommentsProps = {
@@ -28,9 +27,7 @@ export const Comments: FC<CommentsProps> = ({ comments }) => {
       <h2 className="text-s_text font-bold mb-4">Comments ({comments.length})</h2>
       <ul className="space-y-4">
         {comments.map((comment) => (
-          <div key={comment.id}>
-            <CommentCard comment={comment} />
-          </div>
+          <CommentCard key={comment.id} comment={comment} />
         ))}
       </ul>
     </div>

@@ -1,12 +1,15 @@
 'use client'
 
+import { ImageWithFallback } from '@/ui/ImageWithFallback/ImageWithFallback'
+
 import { Comments } from '@/app/articles/[id]/_components'
 import { Article, Comment } from '@/types'
-import { ImageWithFallback } from '@/ui/ImageWithFallback/ImageWithFallback'
 
 
 export const ArticleDetails = ({ article, comments }: { article: Article; comments: Comment[] }) => {
   if (!article) return null
+
+  console.log('comments', comments)
 
   return (
     <div className='flex flex-col gap-6 w-full'>

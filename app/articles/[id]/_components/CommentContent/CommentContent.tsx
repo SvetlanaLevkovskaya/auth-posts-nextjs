@@ -2,19 +2,17 @@
 
 import { FC } from 'react'
 
-import styles from './CommentContent.module.scss'
 
-
-type CommentContentProps = {
+type Props = {
   body: string
   email: string
 }
 
-export const CommentContent: FC<CommentContentProps> = ({ body, email }) => {
+export const CommentContent: FC<Props> = ({ body, email }) => {
   return (
-    <div className={styles.commentContent}>
-      <p>{body}</p>
-      <small>{email}</small>
-    </div>
+    <>
+      <p className="mt-2 text-gray-4">{body}</p>
+      <small className="text-gray-4 block mt-2">{email}</small>
+    </>
   )
 }
