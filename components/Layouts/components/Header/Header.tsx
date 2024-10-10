@@ -1,4 +1,4 @@
-import { type FC } from 'react'
+import { FC } from 'react'
 
 import { useStore } from '@nanostores/react'
 import { useRouter } from 'next/navigation'
@@ -12,11 +12,11 @@ import styles from './Header.module.css'
 import { logout, userStore } from '@/stores/userStore'
 
 
-interface HeaderProps {
+type Props = {
   isAuth: boolean
 }
 
-export const Header: FC<HeaderProps> = ({ isAuth }) => {
+export const Header: FC<Props> = ({ isAuth }) => {
   const router = useRouter()
 
   const { username } = useStore(userStore)

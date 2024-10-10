@@ -1,6 +1,6 @@
 'use client'
 
-import { type FC, type PropsWithChildren } from 'react'
+import { FC, type PropsWithChildren } from 'react'
 
 import clsx from 'clsx'
 

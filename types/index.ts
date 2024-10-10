@@ -41,4 +41,14 @@ export interface Comment {
   children: Comment[];
 }
 
+export type CommentFormValues = {
+  content: string
+}
+
+export interface EditArticleFormData {
+  title: string
+  content: string
+  image?: FileList | null
+}
+
 

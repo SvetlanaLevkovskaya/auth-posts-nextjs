@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -13,21 +13,15 @@ import { TextArea } from '@/ui/TextArea/TextArea'
 import { editArticleValidationSchema } from '@/utils/editArticleValidationSchema'
 
 import { apiClientService } from '@/app/services/clientApi'
-import { Article } from '@/types'
+import { Article, EditArticleFormData } from '@/types'
 
 
-interface EditArticleFormData {
-  title: string
-  content: string
-  image?: FileList | null
-}
-
-interface EditArticleProps {
+type Props = {
   article: Article
   token: string
 }
 
-export const EditArticleForm: React.FC<EditArticleProps> = ({ article, token }) => {
+export const EditArticleForm: FC<Props> = ({ article, token }) => {
   const {
     register,
     handleSubmit,

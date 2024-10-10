@@ -9,7 +9,7 @@ import { Input } from '@/ui/Input/Input'
 import { CommentCard } from '@/app/articles/[id]/_components'
 import { token } from '@/app/constants'
 import { apiClientService } from '@/app/services/clientApi'
-import { Comment } from '@/types'
+import { Comment, CommentFormValues } from '@/types'
 
 
 type Props = {
@@ -17,16 +17,17 @@ type Props = {
   initialComments: Comment[]
 }
 
-type CommentFormValues = {
-  content: string
-}
-
 export const Comments: FC<Props> = ({ articleId, initialComments }) => {
   const [comments, setComments] = useState<Comment[]>(initialComments)
   const [loading, setLoading] = useState<boolean>(false)
   const [hydrated, setHydrated] = useState(false)
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<CommentFormValues>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CommentFormValues>({
     defaultValues: { content: '' },
   })
 
@@ -37,7 +38,9 @@ export const Comments: FC<Props> = ({ articleId, initialComments }) => {
   const handleAddComment = async (data: CommentFormValues) => {
     setLoading(true)
     try {
-      const newComment = await apiClientService.addCommentToArticle(token, articleId, { content: data.content })
+      const newComment = await apiClientService.addCommentToArticle(token, articleId, {
+        content: data.content,
+      })
       setComments((prevComments) => [...prevComments, newComment.data])
       reset()
     } catch (error) {

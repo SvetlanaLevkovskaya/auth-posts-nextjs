@@ -3,9 +3,9 @@ import type { Metadata } from 'next'
 import { NavLayout } from '@/components/Layouts/NavLayout'
 
 import { ArticleDetails, EditArticleForm } from '@/app/articles/[id]/_components'
+import { token } from '@/app/constants'
 import { apiClientService } from '@/app/services/clientApi'
 import { Params } from '@/types'
-import { token } from '@/app/constants'
 
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {

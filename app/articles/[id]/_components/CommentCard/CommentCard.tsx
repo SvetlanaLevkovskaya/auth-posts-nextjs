@@ -1,48 +1,28 @@
 'use client'
 
-import { FC, KeyboardEvent, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { FC, useState } from 'react'
 
 import { Button } from '@/components/ui'
 
-import { TextArea } from '@/ui/TextArea/TextArea'
-
+import {
+  CommentChildren,
+  CommentEditForm,
+  CommentReplyForm,
+} from '@/app/articles/[id]/_components/CommentCardItems'
 import { token } from '@/app/constants'
 import { apiClientService } from '@/app/services/clientApi'
-import { Comment } from '@/types'
+import { Comment, CommentFormValues } from '@/types'
 
 
-type CommentCardProps = {
+type Props = {
   comment: Comment
   articleId: number
 }
 
-type CommentFormValues = {
-  content: string
-}
-
-export const CommentCard: FC<CommentCardProps> = ({ comment, articleId }) => {
+export const CommentCard: FC<Props> = ({ comment, articleId }) => {
   const [currentComment, setCurrentComment] = useState<Comment>(comment)
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [isReplying, setIsReplying] = useState<boolean>(false)
-
-  const {
-    register: registerEdit,
-    handleSubmit: handleSubmitEdit,
-    reset: resetEdit,
-    formState: { errors: editErrors },
-  } = useForm<CommentFormValues>({
-    defaultValues: { content: currentComment.content },
-  })
-
-  const {
-    register: registerReply,
-    handleSubmit: handleSubmitReply,
-    reset: resetReply,
-    formState: { errors: replyErrors },
-  } = useForm<CommentFormValues>({
-    defaultValues: { content: '' },
-  })
 
   const handleContentUpdated = async (data: CommentFormValues) => {
     try {
@@ -54,7 +34,6 @@ export const CommentCard: FC<CommentCardProps> = ({ comment, articleId }) => {
         content: data.content,
       }))
       setIsEditing(false)
-      resetEdit()
     } catch (error) {
       console.error('Ошибка при обновлении комментария:', error)
     }
@@ -70,41 +49,20 @@ export const CommentCard: FC<CommentCardProps> = ({ comment, articleId }) => {
         ...prevComment,
         children: [...prevComment.children, newReply.data],
       }))
-      resetReply()
       setIsReplying(false)
     } catch (error) {
       console.error('Ошибка при добавлении ответа:', error)
     }
   }
 
-  const handleKeyDownEdit = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSubmitEdit(handleContentUpdated)()
-    }
-  }
-
-  const handleKeyDownReply = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSubmitReply(handleReply)()
-    }
-  }
-
   return (
     <li className="bg-white p-4 rounded-lg shadow-lg border-black border min-w-72">
       {isEditing ? (
-        <form onSubmit={ handleSubmitEdit(handleContentUpdated) }>
-          <TextArea
-            register={ registerEdit('content') }
-            onKeyDown={ handleKeyDownEdit }
-            error={ editErrors.content?.message }
-          />
-          <div className="flex justify-end gap-2 mt-2 mb-2">
-            <Button color="neon" size="m">Сохранить</Button>
-            <Button color="purple" size="m" onClick={ () => setIsEditing(false) }>Отменить</Button>
-          </div>
-        </form>
+        <CommentEditForm
+          initialContent={currentComment.content}
+          onSubmit={handleContentUpdated}
+          onCancel={() => setIsEditing(false)}
+        />
       ) : (
         <>
           <p className="mt-2 text-gray-4" onClick={() => setIsEditing(true)}>
@@ -128,33 +86,11 @@ export const CommentCard: FC<CommentCardProps> = ({ comment, articleId }) => {
       )}
 
       {isReplying && !isEditing && (
-        <form onSubmit={ handleSubmitReply(handleReply) } className="mt-2">
-          <TextArea
-            register={registerReply('content')}
-            onKeyDown={handleKeyDownReply}
-            error={replyErrors.content?.message}
-          />
-          <div className="flex justify-end gap-2 mt-2 mb-2">
-            <Button color="neon" size="m">
-              Ответить
-            </Button>
-            <Button color="purple" size="m" onClick={ () => setIsReplying(false) }>
-              Отмена
-            </Button>
-          </div>
-        </form>
-      ) }
+        <CommentReplyForm onSubmit={handleReply} onCancel={() => setIsReplying(false)} />
+      )}
 
-      { currentComment?.children?.length > 0 && (
-        <ul>
-          {currentComment.children.map((childComment, index) => (
-            <CommentCard
-              key={`${childComment.id}-${index}`}
-              comment={childComment}
-              articleId={articleId}
-            />
-          ))}
-        </ul>
+      {currentComment?.children?.length > 0 && (
+        <CommentChildren childrenComments={currentComment.children} articleId={articleId} />
       )}
     </li>
   )
