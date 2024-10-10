@@ -4,6 +4,8 @@ import { FC, useState } from 'react'
 
 import { Button } from '@/components/ui'
 
+import { formattedDate } from '@/utils/formattedDate'
+
 import {
   CommentChildren,
   CommentEditForm,
@@ -70,6 +72,11 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
           </p>
           <small className="text-gray-4 block mt-2">
             {currentComment?.author?.username || 'Anonymous'}
+          </small>
+          <small className="text-gray-4 block mt-1">
+            {currentComment.updated !== currentComment.created
+              ? `Обновлено: ${formattedDate(currentComment.updated)}`
+              : `Опубликовано: ${formattedDate(currentComment.created)}`}
           </small>
           <Button
             color="grey"
