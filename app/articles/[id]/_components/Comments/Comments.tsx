@@ -82,8 +82,8 @@ export const Comments: FC<Props> = ({ articleId, initialComments }) => {
       <hr className="bg-gray-3 my-4" />
 
       <ul className="space-y-4">
-        {comments.map((comment) => (
-          <CommentCard key={comment.id} comment={comment} articleId={articleId} />
+        {comments.map((comment, index) => (
+          <CommentCard key={`${comment.id}-${index}`} comment={comment} articleId={articleId} />
         ))}
       </ul>
     </div>
