@@ -1,18 +1,3 @@
-export interface Post {
-  userId: number
-  id: number
-  title: string
-  body: string
-}
-
-/*export interface Comment {
-  postId: number
-  id: number
-  name: string
-  email: string
-  body: string
-}*/
-
 export interface User {
   id: number
   username: string
@@ -48,11 +33,7 @@ export interface Article {
 
 export interface Comment {
   id: number;
-  author: {
-    id: number;
-    username: string;
-    email: string;
-  };
+  author: Author;
   content: string;
   created: string;
   updated: string;
