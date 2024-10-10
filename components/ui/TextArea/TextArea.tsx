@@ -1,4 +1,4 @@
-import { ChangeEventHandler } from 'react'
+import { ChangeEventHandler, KeyboardEventHandler } from 'react'
 import { UseFormRegisterReturn } from 'react-hook-form'
 
 import clsx from 'clsx'
@@ -11,6 +11,7 @@ interface TextAreaProps {
   placeholder?: string
   error?: string | boolean
   onChange?: ChangeEventHandler<HTMLTextAreaElement>
+  onKeyDown?: KeyboardEventHandler<HTMLTextAreaElement>
   required?: boolean
   className?: string
   label?: string
@@ -22,6 +23,7 @@ export const TextArea = ({
   className,
   label,
   onChange: onChangeTextArea,
+  onKeyDown: onKeyDownTextArea,
   ...props
 }: TextAreaProps) => {
   return (
@@ -41,6 +43,10 @@ export const TextArea = ({
             {...register}
             onChange={(e) => {
               onChangeTextArea?.(e)
+              register?.onChange(e)
+            }}
+            onKeyDown={(e) => {
+              onKeyDownTextArea?.(e)
               register?.onChange(e)
             }}
             name={register?.name}

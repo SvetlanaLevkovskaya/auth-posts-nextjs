@@ -8,6 +8,7 @@ import styles from './Input.module.scss'
 
 import { InputProps } from './Input.types'
 
+
 export const Input: FC<InputProps> = ({
   register,
   type = 'text',
@@ -20,6 +21,7 @@ export const Input: FC<InputProps> = ({
   className,
 
   onChange: onChangeInput,
+  onKeyDown: onKeyDownInput,
   loading,
   autofocus,
   ...props
@@ -49,6 +51,10 @@ export const Input: FC<InputProps> = ({
             onChange={(e) => {
               onChangeInput?.(e)
               register?.onChange?.(e)
+            }}
+            onKeyDown={(e) => {
+              onKeyDownInput?.(e)
+              register?.onChange(e)
             }}
             {...props}
           />

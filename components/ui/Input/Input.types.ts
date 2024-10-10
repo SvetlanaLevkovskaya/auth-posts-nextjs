@@ -1,5 +1,5 @@
-import { ChangeEventHandler } from 'react'
-import { UseFormRegisterReturn } from 'react-hook-form'
+import { ChangeEventHandler, KeyboardEventHandler } from 'react'
+
 
 type InputTypeNamespace = 'text' | 'password' | 'file'
 
@@ -10,6 +10,7 @@ export interface InputProps {
   type?: InputTypeNamespace
   error?: string | boolean
   onChange?: ChangeEventHandler<HTMLInputElement>
+  onKeyDown?: KeyboardEventHandler<HTMLInputElement>
   required?: boolean
   disabled?: boolean
   className?: string

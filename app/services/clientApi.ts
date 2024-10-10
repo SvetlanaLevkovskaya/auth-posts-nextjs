@@ -75,4 +75,9 @@ export const apiClientService = {
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     })
   },
+  updateCommentContent: async (token: string, articleId: number, commentId: number, data: { content: string }) => {
+    return instanceAxios.put(`${ApiRoutes.articles}${articleId}/comments/${commentId}/`, data, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+  }
 }
