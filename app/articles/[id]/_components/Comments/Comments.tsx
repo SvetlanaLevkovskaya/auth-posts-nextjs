@@ -1,13 +1,12 @@
 'use client'
 
-import { FC, useEffect, useState } from 'react'
+import { FC, KeyboardEvent, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '@/ui/Button/Button'
 import { Input } from '@/ui/Input/Input'
 
 import { CommentCard } from '@/app/articles/[id]/_components'
-import { token } from '@/app/constants'
 import { apiClientService } from '@/app/services/clientApi'
 import { Comment, CommentFormValues } from '@/types'
 
@@ -38,10 +37,10 @@ export const Comments: FC<Props> = ({ articleId, initialComments }) => {
   const handleAddComment = async (data: CommentFormValues) => {
     setLoading(true)
     try {
-      const newComment = await apiClientService.addCommentToArticle(token, articleId, {
+      const newComment = await apiClientService.addCommentToArticle(articleId, {
         content: data.content,
       })
-      setComments((prevComments) => [...prevComments, newComment.data])
+      setComments((prevComments) => [...prevComments, newComment])
       reset()
     } catch (error) {
       console.error('Ошибка при добавлении комментария:', error)
@@ -50,7 +49,7 @@ export const Comments: FC<Props> = ({ articleId, initialComments }) => {
     }
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSubmit(handleAddComment)()

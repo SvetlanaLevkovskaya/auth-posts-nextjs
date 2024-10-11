@@ -9,7 +9,6 @@ import {
   CommentEditForm,
   CommentReplyForm,
 } from '@/app/articles/[id]/_components/CommentCardItems'
-import { token } from '@/app/constants'
 import { apiClientService } from '@/app/services/clientApi'
 import { Comment, CommentFormValues } from '@/types'
 import { formattedDate } from '@/utils'
@@ -27,7 +26,7 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
 
   const handleContentUpdated = async (data: CommentFormValues) => {
     try {
-      await apiClientService.updateCommentContent(token, articleId, currentComment.id, {
+      await apiClientService.updateCommentContent(articleId, currentComment.id, {
         content: data.content,
       })
       setCurrentComment((prevComment) => ({
@@ -42,13 +41,13 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
 
   const handleReply = async (data: CommentFormValues) => {
     try {
-      const newReply = await apiClientService.addCommentToArticle(token, articleId, {
+      const newReply = await apiClientService.addCommentToArticle(articleId, {
         content: data.content,
         parent: currentComment.id,
       })
       setCurrentComment((prevComment) => ({
         ...prevComment,
-        children: [...prevComment.children, newReply.data],
+        children: [...prevComment.children, newReply],
       }))
       setIsReplying(false)
     } catch (error) {

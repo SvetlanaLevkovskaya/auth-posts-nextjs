@@ -17,7 +17,7 @@ interface CreateArticleFormData {
   image?: FileList | null
 }
 
-export const CreateArticleForm = ({ token }: { token: string }) => {
+export const CreateArticleForm = () => {
   const {
     register,
     handleSubmit,
@@ -34,7 +34,7 @@ export const CreateArticleForm = ({ token }: { token: string }) => {
     if (data.image && data.image.length > 0) {
       formData.append('image', data.image[0])
     }
-    await apiClientService.createArticle(formData, token)
+    await apiClientService.createArticle(formData)
     customToastSuccess(`Статья успешно создана!`)
   }
 

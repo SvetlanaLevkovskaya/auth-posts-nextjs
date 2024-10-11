@@ -21,10 +21,9 @@ import { editArticleValidationSchema } from '@/utils'
 
 type Props = {
   article: Article
-  token: string
 }
 
-export const EditArticleForm: FC<Props> = ({ article, token }) => {
+export const EditArticleForm: FC<Props> = ({ article }) => {
   const {
     register,
     handleSubmit,
@@ -49,7 +48,7 @@ export const EditArticleForm: FC<Props> = ({ article, token }) => {
     }
 
     try {
-      await apiClientService.updateArticle(article.id, formData, token)
+      await apiClientService.updateArticle(article.id, formData)
       customToastSuccess(`Статья успешно обновлена!`)
     } catch (error) {
       console.error('Ошибка при обновлении статьи:', error)

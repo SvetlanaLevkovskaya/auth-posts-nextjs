@@ -1,25 +1,33 @@
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
+import { customToastError } from '@/components/ui'
+
+import { refreshAccessToken } from '@/app/providers/refreshAccessToken'
 import { ApiRoutes } from '@/lib/api/routes'
 
 
 export const handleApiError = (error: unknown): string => {
+  let errorMessage = 'Произошла неизвестная ошибка'
+
   if (axios.isAxiosError(error)) {
     if (error.response) {
-      console.error(error.message)
-      return error.message || error.response.statusText
+      console.error('API Error:', error.message)
+      errorMessage = error.response.data?.detail || error.message || error.response.statusText
     } else if (error.request) {
-      console.error('No Response Error:', error.request.statusText)
-      return error.request.statusText
+      console.error('No Response Error:', error.request)
+      errorMessage = 'No response from server'
     }
   } else if (error instanceof Error) {
     console.error('Unknown Error:', error.message)
-    return error.message
+    errorMessage = error.message
   } else {
     console.error('Unexpected Error:', error)
-    return error as string
+    errorMessage = 'An unexpected error occurred'
   }
-  return 'Произошла неизвестная ошибка'
+
+  customToastError(errorMessage)
+  return errorMessage
 }
 
 const instanceAxios = axios.create({
@@ -33,51 +41,76 @@ const instanceAxios = axios.create({
   },
 })
 
-instanceAxios.interceptors.response.use(
-  (res) => res,
+instanceAxios.interceptors.request.use(
+  (config) => {
+    const token = Cookies.get('access_token')
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`
+    }
+    return config
+  },
   (error) => {
-    const errorMessage = handleApiError(error)
-    return Promise.reject(new Error(errorMessage))
+    return Promise.reject(error)
+  }
+)
+
+instanceAxios.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true
+      try {
+        await refreshAccessToken()
+        originalRequest.headers['Authorization'] = `Bearer ${Cookies.get('access_token')}`
+        return instanceAxios(originalRequest)
+      } catch (refreshError) {
+        console.error('Error refreshing token:', handleApiError(refreshError))
+        return Promise.reject(refreshError)
+      }
+    } else {
+      console.error('API Error:', handleApiError(error))
+    }
+    return Promise.reject(error)
   }
 )
 
 export const apiClientService = {
-  getAllArticles: async (token: string | null) => {
-    return instanceAxios.get(ApiRoutes.articles, {
-      headers: { Authorization: `Bearer ${ token }` },
-    })
+  getAllArticles: async () => {
+    const response = await instanceAxios.get(ApiRoutes.articles)
+    return response.data
   },
 
-  getAllArticleById: async (token: string | null, id: any) => {
-    return instanceAxios.get(`${ ApiRoutes.article }${ id }`, {
-      headers: { Authorization: `Bearer ${ token }` },
-    })
-  },
-  createArticle: async (data: any, token: string) => {
-    return instanceAxios.post(ApiRoutes.articles, data, {
-      headers: { Authorization: `Bearer ${ token }`, 'Content-Type': 'multipart/form-data' },
-    });
+  getAllArticleById: async ( id: any) => {
+    const response = await instanceAxios.get(`${ ApiRoutes.article }${ id }`)
+    return response.data
   },
 
-  updateArticle: async (id: any, data: FormData, token: string) => {
-    return instanceAxios.put(`${ ApiRoutes.article }${ id }/`, data, {
-      headers: { Authorization: `Bearer ${ token }`, 'Content-Type': 'multipart/form-data' },
-    });
+  createArticle: async (data: any) => {
+    const response = await instanceAxios.post(ApiRoutes.articles, data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    return response.data
   },
 
-  getCommentsByArticleId: async (token: string, articleId: number) => {
-    return instanceAxios.get(`${ ApiRoutes.articles }${ articleId }/comments/`, {
-      headers: { Authorization: `Bearer ${ token }` },
-    });
-  },
-  addCommentToArticle: async (token: string, articleId: number, data: { content: string; parent?: number | null }) => {
-    return instanceAxios.post(`${ApiRoutes.articles}${articleId}/comments/`, data, {
-      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+  updateArticle: async (id: any, data: FormData,) => {
+    const response = await instanceAxios.put(`${ApiRoutes.article}${id}/`, data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
     })
+    return response.data
   },
-  updateCommentContent: async (token: string, articleId: number, commentId: number, data: { content: string }) => {
-    return instanceAxios.put(`${ApiRoutes.articles}${articleId}/comments/${commentId}/`, data, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+
+  getCommentsByArticleId: async (articleId: number) => {
+    const response = await instanceAxios.get(`${ApiRoutes.articles}${articleId}/comments/`)
+    return response.data
+  },
+
+  addCommentToArticle: async (articleId: number, data: { content: string; parent?: number | null }) => {
+    const response = await instanceAxios.post(`${ApiRoutes.articles}${articleId}/comments/`, data)
+    return response.data
+  },
+  updateCommentContent: async (articleId: number, commentId: number, data: { content: string }) => {
+    const response = await instanceAxios.put(`${ApiRoutes.articles}${articleId}/comments/${commentId}/`, data)
+    return response.data
   }
 }

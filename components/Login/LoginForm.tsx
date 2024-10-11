@@ -3,6 +3,8 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
+import axios from 'axios'
+import Cookies from 'js-cookie'
 
 import { Button, Input, customToastError, customToastSuccess } from '@/ui/index'
 
@@ -23,14 +25,22 @@ export const LoginForm = () => {
   })
 
   const onSubmit: SubmitHandler<FormData> = async ({ username, password }) => {
-    if (username === 'admin' && password === 'admin') {
+    try {
+      const response = await axios.post('https://darkdes-django-t3b02.tw1.ru/api/v1/token/', {
+        username,
+        password,
+      })
+      const { access, refresh } = response.data
+
+      Cookies.set('access_token', access)
+      Cookies.set('refresh_token', refresh)
+
       login(username, password)
+
       customToastSuccess(`User ${username} logged in`)
-      setTimeout(() => {
-        window.location.href = '/'
-      }, 1500)
-    } else {
-      customToastError('Please enter admin/admin')
+      window.location.href = '/'
+    } catch (error) {
+      customToastError('No active account found with the given credentials')
     }
   }
 
@@ -40,7 +50,7 @@ export const LoginForm = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input
             register={register('username', { required: true })}
-            placeholder="admin"
+            placeholder="test_task1"
             error={errors.username?.message}
             required
             autofocus
@@ -48,7 +58,7 @@ export const LoginForm = () => {
 
           <Input
             register={register('password', { required: true })}
-            placeholder="admin"
+            placeholder="test_task12345"
             type="password"
             error={errors.password?.message}
             required
