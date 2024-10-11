@@ -38,29 +38,28 @@ export const Input: FC<InputProps> = ({
       )}
     >
       <label>
-        {label && <span className={styles.label}>{label}</span>}
+        { label && <span className={ styles.label }>{ label }</span> }
 
-        <div className={styles.wrapper}>
+        <div className={ styles.wrapper }>
           <input
-            type={currentType}
-            placeholder={placeholder}
-            required={required}
-            disabled={disabled}
-            autoFocus={autofocus}
-            {...register}
-            onChange={(e) => {
+            type={ currentType }
+            placeholder={ placeholder }
+            required={ required }
+            disabled={ disabled }
+            autoFocus={ autofocus }
+            { ...register }
+            onChange={ (e) => {
               onChangeInput?.(e)
               register?.onChange?.(e)
-            }}
-            onKeyDown={(e) => {
+            } }
+            onKeyDown={ (e) => {
               onKeyDownInput?.(e)
               register?.onChange(e)
-            }}
-            {...props}
+            } }
+            { ...props }
           />
         </div>
-
-        {typeof error === 'string' && !!error.length && <div className={styles.error}>{error}</div>}
+        { typeof error === 'string' && !!error.length && <div className={ styles.error }>{ error }</div> }
       </label>
     </div>
   )

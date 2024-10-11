@@ -5,7 +5,7 @@ import { customToastError } from '@/components/ui'
 
 import { refreshAccessToken } from '@/app/providers/refreshAccessToken'
 import { ApiRoutes } from '@/lib/api/routes'
-import { ArticleFormData, CommentFormData } from '@/types'
+import { CommentFormData } from '@/types'
 
 
 export const handleApiError = (error: unknown): string => {
@@ -87,14 +87,14 @@ export const apiClientService = {
     return response.data
   },
 
-  createArticle: async (data: ArticleFormData) => {
+  createArticle: async (data: FormData) => {
     const response = await instanceAxios.post(ApiRoutes.articles, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
     return response.data
   },
 
-  updateArticle: async (id: number, data: ArticleFormData) => {
+  updateArticle: async (id: number, data: FormData) => {
     const response = await instanceAxios.put(`${ApiRoutes.article}${id}/`, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
@@ -106,10 +106,7 @@ export const apiClientService = {
     return response.data
   },
 
-  addCommentToArticle: async (
-    articleId: string | number,
-    data: CommentFormData
-  ) => {
+  addCommentToArticle: async (articleId: string | number, data: CommentFormData) => {
     const response = await instanceAxios.post(`${ApiRoutes.articles}${articleId}/comments/`, data)
     return response.data
   },

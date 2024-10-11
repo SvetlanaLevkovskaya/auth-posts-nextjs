@@ -10,18 +10,18 @@ import { Button } from '@/ui/Button/Button'
 interface ButtonNotFoundProps {}
 
 export const ButtonNotFound: FC<ButtonNotFoundProps> = () => {
-	const { push } = useRouter()
+  const { push } = useRouter()
 
-	return (
-		<Button
-			color="white"
-			size="l"
-			className="w-full tb:w-[330px] mt-5"
-			onClick={() => {
-				push('/')
-			}}
-		>
-			Go Home
-		</Button>
-	)
+  return (
+    <Button
+      color="white"
+      size="l"
+      className="w-full tb:w-[330px] mt-5"
+      onClick={() => {
+        push('/')
+      }}
+    >
+      Go Home
+    </Button>
+  )
 }

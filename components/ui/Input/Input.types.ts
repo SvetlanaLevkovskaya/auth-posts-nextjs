@@ -1,7 +1,7 @@
 import { ChangeEventHandler, KeyboardEventHandler } from 'react'
 
 
-type InputTypeNamespace = 'text' | 'password' | 'file'
+type InputTypeNamespace = 'text' | 'password' | 'file' | 'email'
 
 export interface InputProps {
   register: any

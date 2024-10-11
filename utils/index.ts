@@ -1,5 +1,6 @@
 export * from './createArticleValidationSchema'
 export * from './editArticleValidationSchema'
 export * from './formattedDate'
-export * from './validationSchema'
+export * from './loginValidationSchema'
 export * from './hasLongWord'
+export * from './registrationValidationSchema'

@@ -5,14 +5,13 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import Link from 'next/link'
 
 import { Button, Input, customToastError, customToastSuccess } from '@/ui/index'
 
-import styles from './LoginForm.module.scss'
-
 import { login } from '@/stores/userStore'
 import { FormData } from '@/types'
-import { validationSchema } from '@/utils'
+import { loginValidationSchema } from '@/utils'
 
 
 export const LoginForm = () => {
@@ -21,7 +20,7 @@ export const LoginForm = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(loginValidationSchema),
   })
 
   const onSubmit: SubmitHandler<FormData> = async ({ username, password }) => {
@@ -45,28 +44,34 @@ export const LoginForm = () => {
   }
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.formWrapper}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+    <div className="flex-center-center min-h-screen">
+      <div className="w-full max-w-md p-8 bg-white shadow-md rounded-md">
+        <form onSubmit={ handleSubmit(onSubmit) } className="flex flex-col gap-5">
           <Input
-            register={register('username', { required: true })}
-            placeholder="test_task1"
-            error={errors.username?.message}
+            register={ register('username', { required: true }) }
+            placeholder="username"
+            error={ errors.username?.message }
             required
             autofocus
           />
 
           <Input
-            register={register('password', { required: true })}
-            placeholder="test_task12345"
+            register={ register('password', { required: true }) }
+            placeholder="password"
             type="password"
-            error={errors.password?.message}
+            error={ errors.password?.message }
             required
           />
-          <Button color="neon" className={styles.btn} disabled={isSubmitting}>
+          <Button color="neon" className="w-full" disabled={ isSubmitting }>
             Login
           </Button>
         </form>
+        <p className='text-black mt-4'>
+          Don't have an account?
+          <Link href="/registration" className="link text-black ml-2">
+            Register
+          </Link>
+        </p>
       </div>
     </div>
   )
