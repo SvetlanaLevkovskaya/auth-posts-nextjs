@@ -67,7 +67,7 @@ export const LoginForm = () => {
           </Button>
         </form>
         <p className='text-black mt-4'>
-          Don't have an account?
+          Don&apos;t have an account?
           <Link href="/registration" className="link text-black ml-2">
             Register
           </Link>
