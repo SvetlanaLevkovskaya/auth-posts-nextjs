@@ -70,6 +70,13 @@ export const LoginForm = () => {
             Register
           </Link>
         </p>
+
+        <p className='text-black mt-4'>
+          Forgot your password?
+          <Link href="/changePassword" className="link text-black ml-2">
+            Change Password
+          </Link>
+        </p>
       </div>
     </div>
   )

@@ -52,4 +52,11 @@ export interface ArticleFormData {
   image?: FileList | null
 }
 
+export interface ChangePasswordFormData {
+  old_password: string
+  password: string
+  confirmed_password: string
+}
+
+
 
