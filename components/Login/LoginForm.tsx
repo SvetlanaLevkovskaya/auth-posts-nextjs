@@ -48,19 +48,17 @@ export const LoginForm = () => {
       <div className="w-full max-w-md p-8 bg-white shadow-md rounded-md">
         <form onSubmit={ handleSubmit(onSubmit) } className="flex flex-col gap-5">
           <Input
-            register={ register('username', { required: true }) }
+            register={ register('username') }
             placeholder="username"
             error={ errors.username?.message }
-            required
             autofocus
           />
 
           <Input
-            register={ register('password', { required: true }) }
+            register={ register('password') }
             placeholder="password"
             type="password"
             error={ errors.password?.message }
-            required
           />
           <Button color="neon" className="w-full" disabled={ isSubmitting }>
             Login

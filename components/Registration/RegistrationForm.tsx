@@ -61,38 +61,37 @@ export const RegistrationForm = () => {
   return (
     <div className="flex-center-center min-h-screen">
       <div className="w-full max-w-md p-8 bg-white shadow-md rounded-md">
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" >
           <Input
-            register={register('username', { required: true })}
+            register={register('username')}
             placeholder="Username"
             error={errors.username?.message}
-            required
+            autofocus
           />
           <Input
-            register={register('password', { required: true })}
+            register={register('password')}
             placeholder="Password"
             type="password"
             error={errors.password?.message}
-            required
+
           />
           <Input
-            register={register('email', { required: true })}
+            register={register('email')}
             placeholder="Email"
             type="email"
             error={errors.email?.message}
-            required
+
           />
           <Input
-            register={register('firstName', { required: true })}
+            register={register('firstName')}
             placeholder="First Name"
             error={errors.firstName?.message}
-            required
+
           />
           <Input
-            register={register('lastName', { required: true })}
+            register={register('lastName')}
             placeholder="Last Name"
             error={errors.lastName?.message}
-            required
           />
           <Button color="neon" disabled={isSubmitting}>
             Register
