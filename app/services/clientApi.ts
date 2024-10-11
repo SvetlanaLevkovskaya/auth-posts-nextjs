@@ -66,12 +66,12 @@ export const apiClientService = {
   },
 
   getCommentsByArticleId: async (token: string, articleId: number) => {
-    return instanceAxios.get(`${ ApiRoutes.articles }/${ articleId }/comments/`, {
+    return instanceAxios.get(`${ ApiRoutes.articles }${ articleId }/comments/`, {
       headers: { Authorization: `Bearer ${ token }` },
     });
   },
   addCommentToArticle: async (token: string, articleId: number, data: { content: string; parent?: number | null }) => {
-    return instanceAxios.post(`${ApiRoutes.articles}/${articleId}/comments/`, data, {
+    return instanceAxios.post(`${ApiRoutes.articles}${articleId}/comments/`, data, {
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     })
   },

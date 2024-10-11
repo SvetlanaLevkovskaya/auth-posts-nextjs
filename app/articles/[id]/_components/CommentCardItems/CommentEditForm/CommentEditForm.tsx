@@ -1,8 +1,7 @@
 import { FC, KeyboardEvent } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { TextArea } from '@/ui/TextArea/TextArea'
-import { Button } from '@/ui/index'
+import { Button, TextArea } from '@/ui/index'
 
 import { CommentFormValues } from '@/types'
 

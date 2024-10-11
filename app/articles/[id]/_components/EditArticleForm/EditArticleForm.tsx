@@ -5,15 +5,18 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import { Button, Input, Spinner } from '@/components/ui'
-
-import { customToastError, customToastSuccess } from '@/ui/CustomToast/CustomToast'
-import { TextArea } from '@/ui/TextArea/TextArea'
-
-import { editArticleValidationSchema } from '@/utils/editArticleValidationSchema'
+import {
+  Button,
+  Input,
+  Spinner,
+  TextArea,
+  customToastError,
+  customToastSuccess,
+} from '@/components/ui'
 
 import { apiClientService } from '@/app/services/clientApi'
 import { Article, EditArticleFormData } from '@/types'
+import { editArticleValidationSchema } from '@/utils'
 
 
 type Props = {

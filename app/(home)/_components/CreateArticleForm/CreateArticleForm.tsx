@@ -5,13 +5,10 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import { Button, Input, Spinner } from '@/components/ui'
-
-import { customToastSuccess } from '@/ui/CustomToast/CustomToast'
-
-import { createArticleValidationSchema } from '@/utils/createArticleValidationSchema'
+import { Button, Input, Spinner, customToastSuccess } from '@/components/ui'
 
 import { apiClientService } from '@/app/services/clientApi'
+import { createArticleValidationSchema } from '@/utils'
 
 
 interface CreateArticleFormData {
@@ -20,7 +17,7 @@ interface CreateArticleFormData {
   image?: FileList | null
 }
 
-export const CreateArticleForm = ({token}: {token: string}) => {
+export const CreateArticleForm = ({ token }: { token: string }) => {
   const {
     register,
     handleSubmit,

@@ -1,13 +1,10 @@
 import { FC } from 'react'
 
-import Image from 'next/image'
 import Link from 'next/link'
 
-import { Button } from '@/components/ui'
+import { Button, ImageWithFallback } from '@/components/ui'
 
 import { Article } from '@/types'
-import { ImageWithFallback } from '@/ui/ImageWithFallback/ImageWithFallback'
-
 
 
 type Props = {
@@ -38,7 +35,7 @@ export const ArticlesList: FC<Props> = ({ articles }) => {
                 alt={article.title}
                 width={192}
                 height={192}
-               />
+              />
               <div className="flex flex-col justify-between flex-grow">
                 <div className="flex flex-col justify-between">
                   <h2 className="break-all whitespace-normal">{article.title.toUpperCase()}</h2>

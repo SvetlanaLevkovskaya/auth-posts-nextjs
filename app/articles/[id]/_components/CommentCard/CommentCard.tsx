@@ -4,8 +4,6 @@ import { FC, useState } from 'react'
 
 import { Button } from '@/components/ui'
 
-import { formattedDate } from '@/utils/formattedDate'
-
 import {
   CommentChildren,
   CommentEditForm,
@@ -14,6 +12,7 @@ import {
 import { token } from '@/app/constants'
 import { apiClientService } from '@/app/services/clientApi'
 import { Comment, CommentFormValues } from '@/types'
+import { formattedDate } from '@/utils'
 
 
 type Props = {
@@ -58,7 +57,7 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
   }
 
   return (
-    <li className="bg-white p-4 rounded-lg shadow-lg border-black border min-w-72">
+    <li className="bg-white p-4 rounded-lg shadow-lg border min-w-72 mb-2">
       {isEditing ? (
         <CommentEditForm
           initialContent={currentComment.content}
@@ -67,7 +66,7 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
         />
       ) : (
         <>
-          <p className="mt-2 text-gray-4" onClick={() => setIsEditing(true)}>
+          <p className="mt-2 text-gray-3 break-words" onClick={() => setIsEditing(true)}>
             {currentComment.content}
           </p>
           <small className="text-gray-4 block mt-2">

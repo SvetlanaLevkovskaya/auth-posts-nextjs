@@ -1,3 +1,6 @@
 export * from './Button/Button'
 export * from './Input/Input'
 export * from './Spinner/Spinner'
+export * from './ImageWithFallback/ImageWithFallback'
+export * from './TextArea/TextArea'
+export * from './CustomToast/CustomToast'

@@ -4,15 +4,14 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import { customToastError, customToastSuccess } from '@/ui/CustomToast/CustomToast'
-import { Button, Input } from '@/ui/index'
-
-import { validationSchema } from '@/utils/validationSchema'
+import { Button, Input, customToastError, customToastSuccess } from '@/ui/index'
 
 import styles from './LoginForm.module.scss'
 
 import { login } from '@/stores/userStore'
 import { FormData } from '@/types'
+import { validationSchema } from '@/utils'
+
 
 export const LoginForm = () => {
   const {
