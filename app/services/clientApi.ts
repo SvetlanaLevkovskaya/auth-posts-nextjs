@@ -5,6 +5,7 @@ import { customToastError } from '@/components/ui'
 
 import { refreshAccessToken } from '@/app/providers/refreshAccessToken'
 import { ApiRoutes } from '@/lib/api/routes'
+import { ArticleFormData, CommentFormData } from '@/types'
 
 
 export const handleApiError = (error: unknown): string => {
@@ -81,36 +82,46 @@ export const apiClientService = {
     return response.data
   },
 
-  getAllArticleById: async ( id: any) => {
-    const response = await instanceAxios.get(`${ ApiRoutes.article }${ id }`)
+  getAllArticleById: async (id: string | number) => {
+    const response = await instanceAxios.get(`${ApiRoutes.article}${id}`)
     return response.data
   },
 
-  createArticle: async (data: any) => {
+  createArticle: async (data: ArticleFormData) => {
     const response = await instanceAxios.post(ApiRoutes.articles, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
     return response.data
   },
 
-  updateArticle: async (id: any, data: FormData,) => {
+  updateArticle: async (id: number, data: ArticleFormData) => {
     const response = await instanceAxios.put(`${ApiRoutes.article}${id}/`, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
     return response.data
   },
 
-  getCommentsByArticleId: async (articleId: number) => {
+  getCommentsByArticleId: async (articleId: string | number) => {
     const response = await instanceAxios.get(`${ApiRoutes.articles}${articleId}/comments/`)
     return response.data
   },
 
-  addCommentToArticle: async (articleId: number, data: { content: string; parent?: number | null }) => {
+  addCommentToArticle: async (
+    articleId: string | number,
+    data: CommentFormData
+  ) => {
     const response = await instanceAxios.post(`${ApiRoutes.articles}${articleId}/comments/`, data)
     return response.data
   },
-  updateCommentContent: async (articleId: number, commentId: number, data: { content: string }) => {
-    const response = await instanceAxios.put(`${ApiRoutes.articles}${articleId}/comments/${commentId}/`, data)
+  updateCommentContent: async (
+    articleId: string | number,
+    commentId: number,
+    data: CommentFormData
+  ) => {
+    const response = await instanceAxios.put(
+      `${ApiRoutes.articles}${articleId}/comments/${commentId}/`,
+      data
+    )
     return response.data
-  }
+  },
 }

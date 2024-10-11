@@ -10,7 +10,7 @@ export type FormData = {
 
 export type Params = {
   params: {
-    id: number
+    id: string | number
   }
 }
 
@@ -41,11 +41,12 @@ export interface Comment {
   children: Comment[];
 }
 
-export type CommentFormValues = {
+export type CommentFormData = {
   content: string
+  parent?: number | null
 }
 
-export interface EditArticleFormData {
+export interface ArticleFormData {
   title: string
   content: string
   image?: FileList | null

@@ -3,11 +3,11 @@ import { useForm } from 'react-hook-form'
 
 import { Button, TextArea } from '@/ui/index'
 
-import { CommentFormValues } from '@/types'
+import { CommentFormData } from '@/types'
 
 
 type Props = {
-  onSubmit: (data: CommentFormValues) => void
+  onSubmit: (data: CommentFormData) => void
   onCancel: () => void
 }
 
@@ -16,7 +16,7 @@ export const CommentReplyForm: FC<Props> = ({ onSubmit, onCancel }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CommentFormValues>({
+  } = useForm<CommentFormData>({
     defaultValues: { content: '' },
   })
 

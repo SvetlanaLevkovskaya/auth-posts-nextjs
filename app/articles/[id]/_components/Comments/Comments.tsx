@@ -8,7 +8,7 @@ import { Input } from '@/ui/Input/Input'
 
 import { CommentCard } from '@/app/articles/[id]/_components'
 import { apiClientService } from '@/app/services/clientApi'
-import { Comment, CommentFormValues } from '@/types'
+import { Comment, CommentFormData } from '@/types'
 
 
 type Props = {
@@ -26,7 +26,7 @@ export const Comments: FC<Props> = ({ articleId, initialComments }) => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<CommentFormValues>({
+  } = useForm<CommentFormData>({
     defaultValues: { content: '' },
   })
 
@@ -34,7 +34,7 @@ export const Comments: FC<Props> = ({ articleId, initialComments }) => {
     setHydrated(true)
   }, [])
 
-  const handleAddComment = async (data: CommentFormValues) => {
+  const handleAddComment = async (data: CommentFormData) => {
     setLoading(true)
     try {
       const newComment = await apiClientService.addCommentToArticle(articleId, {

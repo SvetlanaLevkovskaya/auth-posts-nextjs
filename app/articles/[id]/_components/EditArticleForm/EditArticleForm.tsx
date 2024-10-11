@@ -15,7 +15,7 @@ import {
 } from '@/components/ui'
 
 import { apiClientService } from '@/app/services/clientApi'
-import { Article, EditArticleFormData } from '@/types'
+import { Article, ArticleFormData } from '@/types'
 import { editArticleValidationSchema } from '@/utils'
 
 
@@ -29,7 +29,7 @@ export const EditArticleForm: FC<Props> = ({ article }) => {
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<EditArticleFormData>({
+  } = useForm<ArticleFormData>({
     resolver: yupResolver(editArticleValidationSchema),
   })
 
@@ -38,7 +38,7 @@ export const EditArticleForm: FC<Props> = ({ article }) => {
     setValue('content', article.content)
   }, [article, setValue])
 
-  const onSubmit: SubmitHandler<EditArticleFormData> = async (data) => {
+  const onSubmit: SubmitHandler<ArticleFormData> = async (data) => {
     const formData = new FormData()
     formData.append('title', data.title)
     formData.append('content', data.content)

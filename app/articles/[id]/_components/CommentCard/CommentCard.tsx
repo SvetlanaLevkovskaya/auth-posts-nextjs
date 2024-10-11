@@ -10,7 +10,7 @@ import {
   CommentReplyForm,
 } from '@/app/articles/[id]/_components/CommentCardItems'
 import { apiClientService } from '@/app/services/clientApi'
-import { Comment, CommentFormValues } from '@/types'
+import { Comment, CommentFormData } from '@/types'
 import { formattedDate } from '@/utils'
 
 
@@ -24,7 +24,7 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [isReplying, setIsReplying] = useState<boolean>(false)
 
-  const handleContentUpdated = async (data: CommentFormValues) => {
+  const handleContentUpdated = async (data: CommentFormData) => {
     try {
       await apiClientService.updateCommentContent(articleId, currentComment.id, {
         content: data.content,
@@ -39,7 +39,7 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
     }
   }
 
-  const handleReply = async (data: CommentFormValues) => {
+  const handleReply = async (data: CommentFormData) => {
     try {
       const newReply = await apiClientService.addCommentToArticle(articleId, {
         content: data.content,

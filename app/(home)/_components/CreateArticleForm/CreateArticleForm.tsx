@@ -8,25 +8,20 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Button, Input, Spinner, customToastSuccess } from '@/components/ui'
 
 import { apiClientService } from '@/app/services/clientApi'
+import { ArticleFormData } from '@/types'
 import { createArticleValidationSchema } from '@/utils'
 
-
-interface CreateArticleFormData {
-  title: string
-  content: string
-  image?: FileList | null
-}
 
 export const CreateArticleForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<CreateArticleFormData>({
+  } = useForm<ArticleFormData>({
     resolver: yupResolver(createArticleValidationSchema),
   })
 
-  const onSubmit: SubmitHandler<CreateArticleFormData> = async (data) => {
+  const onSubmit: SubmitHandler<ArticleFormData> = async (data) => {
     const formData = new FormData()
     formData.append('title', data.title)
     formData.append('content', data.content)
