@@ -13,8 +13,11 @@ export const handleApiError = (error: unknown): string => {
 
   if (axios.isAxiosError(error)) {
     if (error.response) {
-      console.error('API Error:', error.message)
-      errorMessage = error.response.data?.detail || error.message || error.response.statusText
+      console.error('API Error:', error.response.data.username[0])
+      errorMessage =
+        error.response.data?.detail ||
+        error.response.data?.old_password?.[0] ||
+        error.response.data?.username?.[0]
     } else if (error.request) {
       console.error('No Response Error:', error.request)
       errorMessage = 'No response from server'
@@ -120,6 +123,17 @@ export const apiClientService = {
     )
     return response.data
   },
+
+  login: async (data: { username: string; password: string }) => {
+    const response = await instanceAxios.post(`/token/`, data)
+    return response.data
+  },
+
+  registration: async (data: { username: string; password: string, email: string, first_name: string, last_name: string }) => {
+    const response = await instanceAxios.post(`/registration/`, data)
+    return response.data
+  },
+
 
   changePassword: async (data: {
     old_password: string

@@ -46,7 +46,7 @@
 
   &.error {
     & .wrapper input {
-      outline: solid theme('colors.red') 2px;
+      outline: solid theme('colors.red') 1px;
     }
   }
 }

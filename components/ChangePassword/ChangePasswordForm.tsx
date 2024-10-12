@@ -3,10 +3,9 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
-import axios from 'axios'
 import Link from 'next/link'
 
-import { Button, Input, customToastError, customToastSuccess } from '@/ui/index'
+import { Button, Input, customToastSuccess } from '@/ui/index'
 
 import { apiClientService } from '@/services/clientApi'
 
@@ -24,30 +23,15 @@ export const ChangePasswordForm = () => {
   })
 
   const onSubmit: SubmitHandler<ChangePasswordFormData> = async (data) => {
-    try {
-      const response = await apiClientService.changePassword({
-        old_password: data.old_password,
-        password: data.password,
-        confirmed_password: data.confirmed_password,
-      })
+    const response = await apiClientService.changePassword({
+      old_password: data.old_password,
+      password: data.password,
+      confirmed_password: data.confirmed_password,
+    })
 
-      if (response.Success) {
-        customToastSuccess('Password changed successfully')
-        window.location.href = '/login'
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        const errorData = error.response.data
-        if (errorData.old_password) {
-          customToastError('Wrong old password.')
-        } else if (errorData.password) {
-          customToastError('Passwords must be confirmed correctly.')
-        } else {
-          customToastError('Failed to change password.')
-        }
-      } else {
-        customToastError('Failed to change password.')
-      }
+    if (response.Success) {
+      customToastSuccess('Password changed successfully')
+      window.location.href = '/login'
     }
   }
 
