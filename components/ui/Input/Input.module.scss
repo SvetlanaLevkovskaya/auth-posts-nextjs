@@ -26,6 +26,16 @@
           -webkit-text-fill-color: white !important;
           transition: background-color 5000s ease-in-out 0s;
         }
+
+        &::-webkit-file-upload-button {
+          @apply text-gray-4 bg-gray-3 border-none rounded-md pr-2 px-4 pl-0 mr-2 ;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+
+          &:focus {
+            outline: none;
+          }
+        }
       }
     }
 

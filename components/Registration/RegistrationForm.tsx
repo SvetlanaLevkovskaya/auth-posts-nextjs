@@ -61,7 +61,7 @@ export const RegistrationForm = () => {
   return (
     <div className="flex-center-center min-h-screen">
       <div className="w-full max-w-md p-8 bg-white shadow-md rounded-md">
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" >
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" autoComplete="off" noValidate>
           <Input
             register={register('username')}
             placeholder="Username"

@@ -9,7 +9,7 @@ import { Spinner } from '@/components/ui'
 
 import './globals.css'
 
-import AuthProvider from '@/app/providers/authProvider'
+import AuthProvider from '@/providers/authProvider'
 
 
 const inter = Inter({ subsets: ['latin'] })

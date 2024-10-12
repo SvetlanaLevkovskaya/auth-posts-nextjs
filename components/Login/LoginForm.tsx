@@ -46,32 +46,32 @@ export const LoginForm = () => {
   return (
     <div className="flex-center-center min-h-screen">
       <div className="w-full max-w-md p-8 bg-white shadow-md rounded-md">
-        <form onSubmit={ handleSubmit(onSubmit) } className="flex flex-col gap-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5" autoComplete="off" noValidate>
           <Input
-            register={ register('username') }
-            placeholder="username"
-            error={ errors.username?.message }
+            register={register('username')}
+            placeholder="Username"
+            error={errors.username?.message}
             autofocus
           />
 
           <Input
-            register={ register('password') }
-            placeholder="password"
+            register={register('password')}
+            placeholder="Password"
             type="password"
-            error={ errors.password?.message }
+            error={errors.password?.message}
           />
-          <Button color="neon" className="w-full" disabled={ isSubmitting }>
+          <Button color="neon" className="w-full" disabled={isSubmitting}>
             Login
           </Button>
         </form>
-        <p className='text-black mt-4'>
+        <p className="text-black mt-4">
           Don&apos;t have an account?
           <Link href="/registration" className="link text-black ml-2">
             Register
           </Link>
         </p>
 
-        <p className='text-black mt-4'>
+        <p className="text-black mt-4">
           Forgot your password?
           <Link href="/changePassword" className="link text-black ml-2">
             Change Password

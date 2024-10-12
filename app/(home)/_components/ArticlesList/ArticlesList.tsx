@@ -43,7 +43,7 @@ export const ArticlesList: FC<Props> = ({ articles }) => {
                 </div>
                 <div className="mt-4 flex justify-end">
                   <Button color="neon" size="m">
-                    Читать далее
+                    Read more
                   </Button>
                 </div>
               </div>

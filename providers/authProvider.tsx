@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 
 import { userStore } from '@/stores/userStore'
 
+
 export default function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
 

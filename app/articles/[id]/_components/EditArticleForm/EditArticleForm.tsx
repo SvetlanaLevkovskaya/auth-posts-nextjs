@@ -5,16 +5,10 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import {
-  Button,
-  Input,
-  Spinner,
-  TextArea,
-  customToastError,
-  customToastSuccess,
-} from '@/components/ui'
+import { Button, Input, Spinner, TextArea, customToastSuccess } from '@/components/ui'
 
-import { apiClientService } from '@/app/services/clientApi'
+import { apiClientService } from '@/services/clientApi'
+
 import { Article, ArticleFormData } from '@/types'
 import { editArticleValidationSchema } from '@/utils'
 
@@ -46,14 +40,8 @@ export const EditArticleForm: FC<Props> = ({ article }) => {
     if (data.image && data.image.length > 0) {
       formData.append('image', data.image[0])
     }
-
-    try {
-      await apiClientService.updateArticle(article.id, formData)
-      customToastSuccess(`Статья успешно обновлена!`)
-    } catch (error) {
-      console.error('Ошибка при обновлении статьи:', error)
-      customToastError('Ошибка при обновлении статьи')
-    }
+    await apiClientService.updateArticle(article.id, formData)
+    customToastSuccess(`Статья успешно обновлена!`)
   }
 
   return (
@@ -61,32 +49,32 @@ export const EditArticleForm: FC<Props> = ({ article }) => {
       <div className="w-full max-w-md p-8 bg-gray-2 rounded-md">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <Input
-            label={'Заголовок:'}
+            label={'Title:'}
             register={register('title')}
-            placeholder="Заголовок"
+            placeholder="Title"
             error={errors.title?.message}
             disabled={isSubmitting}
           />
 
           <TextArea
-            label={'Описание:'}
+            label={'Content:'}
             register={register('content')}
-            placeholder="Описание"
+            placeholder="Content"
             error={errors.content?.message}
           />
 
           <Input
             type="file"
-            label={'Изображение (необязательно):'}
+            label={'Image (optional):'}
             register={register('image')}
-            placeholder="Изображение"
+            placeholder="Image"
             error={errors.image?.message}
             disabled={isSubmitting}
             accept="image/*"
           />
 
           <Button color="neon" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? <Spinner /> : 'Обновить статью'}
+            {isSubmitting ? <Spinner /> : 'Update article'}
           </Button>
         </form>
       </div>

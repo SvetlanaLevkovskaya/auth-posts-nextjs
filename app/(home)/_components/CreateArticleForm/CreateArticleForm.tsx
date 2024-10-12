@@ -7,7 +7,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 import { Button, Input, Spinner, customToastSuccess } from '@/components/ui'
 
-import { apiClientService } from '@/app/services/clientApi'
+import { apiClientService } from '@/services/clientApi'
+
 import { ArticleFormData } from '@/types'
 import { createArticleValidationSchema } from '@/utils'
 
@@ -38,24 +39,24 @@ export const CreateArticleForm = () => {
       <div className="w-full max-w-md p-8 bg-gray-2 rounded-md">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <Input
-            label={'Заголовок:'}
+            label={'Title:'}
             register={register('title')}
-            placeholder="Заголовок"
+            placeholder="Title"
             error={errors.title?.message}
             disabled={isSubmitting}
           />
 
           <Input
-            label={'Содержание:'}
+            label={'Content:'}
             register={register('content')}
-            placeholder="Содержание"
+            placeholder="Content"
             error={errors.content?.message}
             disabled={isSubmitting}
           />
 
           <Input
             type="file"
-            label={'Изображение (необязательно):'}
+            label={'Image (optional):'}
             register={register('image')}
             error={errors.image?.message}
             disabled={isSubmitting}
@@ -63,7 +64,7 @@ export const CreateArticleForm = () => {
           />
 
           <Button color="neon" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? <Spinner /> : 'Создать статью'}
+            {isSubmitting ? <Spinner /> : 'Create an article'}
           </Button>
         </form>
       </div>

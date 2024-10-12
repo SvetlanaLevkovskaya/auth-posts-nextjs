@@ -15,7 +15,7 @@ export const CommentReplyForm: FC<Props> = ({ onSubmit, onCancel }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<CommentFormData>({
     defaultValues: { content: '' },
   })
@@ -35,11 +35,11 @@ export const CommentReplyForm: FC<Props> = ({ onSubmit, onCancel }) => {
         error={errors.content?.message}
       />
       <div className="flex justify-end gap-2 mt-2 mb-2">
-        <Button color="neon" size="m">
-          Ответить
+        <Button color="neon" size="m" disabled={isSubmitting}>
+          Reply
         </Button>
-        <Button color="purple" size="m" onClick={onCancel}>
-          Отмена
+        <Button color="purple" size="m" onClick={onCancel} disabled={isSubmitting}>
+          Cancel
         </Button>
       </div>
     </form>

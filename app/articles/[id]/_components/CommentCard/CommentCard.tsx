@@ -2,14 +2,15 @@
 
 import { FC, useState } from 'react'
 
-import { Button } from '@/components/ui'
+import { Button, customToastSuccess } from '@/components/ui'
+
+import { apiClientService } from '@/services/clientApi'
 
 import {
   CommentChildren,
   CommentEditForm,
   CommentReplyForm,
 } from '@/app/articles/[id]/_components/CommentCardItems'
-import { apiClientService } from '@/app/services/clientApi'
 import { Comment, CommentFormData } from '@/types'
 import { formattedDate } from '@/utils'
 
@@ -25,34 +26,28 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
   const [isReplying, setIsReplying] = useState<boolean>(false)
 
   const handleContentUpdated = async (data: CommentFormData) => {
-    try {
-      await apiClientService.updateCommentContent(articleId, currentComment.id, {
-        content: data.content,
-      })
-      setCurrentComment((prevComment) => ({
-        ...prevComment,
-        content: data.content,
-      }))
-      setIsEditing(false)
-    } catch (error) {
-      console.error('Ошибка при обновлении комментария:', error)
-    }
+    await apiClientService.updateCommentContent(articleId, currentComment.id, {
+      content: data.content,
+    })
+    setCurrentComment((prevComment) => ({
+      ...prevComment,
+      content: data.content,
+    }))
+    setIsEditing(false)
+    customToastSuccess('Комментарий успешно обновлен')
   }
 
   const handleReply = async (data: CommentFormData) => {
-    try {
-      const newReply = await apiClientService.addCommentToArticle(articleId, {
-        content: data.content,
-        parent: currentComment.id,
-      })
-      setCurrentComment((prevComment) => ({
-        ...prevComment,
-        children: [...prevComment.children, newReply],
-      }))
-      setIsReplying(false)
-    } catch (error) {
-      console.error('Ошибка при добавлении ответа:', error)
-    }
+    const newReply = await apiClientService.addCommentToArticle(articleId, {
+      content: data.content,
+      parent: currentComment.id,
+    })
+    setCurrentComment((prevComment) => ({
+      ...prevComment,
+      children: [...prevComment.children, newReply],
+    }))
+    setIsReplying(false)
+    customToastSuccess('Ответ на комментарий успешно добавлен')
   }
 
   return (
@@ -73,8 +68,8 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
           </small>
           <small className="text-gray-4 block mt-1">
             {currentComment.updated !== currentComment.created
-              ? `Обновлено: ${formattedDate(currentComment.updated)}`
-              : `Опубликовано: ${formattedDate(currentComment.created)}`}
+              ? `Updated: ${formattedDate(currentComment.updated)}`
+              : `Published: ${formattedDate(currentComment.created)}`}
           </small>
           <Button
             color="grey"
@@ -85,7 +80,7 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
             }}
             className="mt-2 mb-2"
           >
-            Ответить
+            Reply
           </Button>
         </>
       )}

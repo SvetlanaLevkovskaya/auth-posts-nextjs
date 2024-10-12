@@ -28,7 +28,7 @@ export const ArticleDetails = ({
         >
           {article.content}
         </p>
-        <p className="text-sm text-gray-4">Автор: {article.author.username}</p>
+        <p className="text-sm text-gray-4">Author: {article.author.username}</p>
       </div>
 
       <div className="container mx-auto p-4 mt-8 bg-gray-1 rounded-lg shadow-md">

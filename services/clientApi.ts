@@ -1,8 +1,10 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-import { refreshAccessToken } from '@/app/providers/refreshAccessToken'
+import { customToastError } from '@/components/ui'
+
 import { ApiRoutes } from '@/lib/api/routes'
+import { refreshAccessToken } from '@/providers/refreshAccessToken'
 import { CommentFormData } from '@/types'
 
 
@@ -24,7 +26,7 @@ export const handleApiError = (error: unknown): string => {
     console.error('Unexpected Error:', error)
     errorMessage = 'An unexpected error occurred'
   }
-
+  customToastError(errorMessage)
   return errorMessage
 }
 
@@ -119,8 +121,12 @@ export const apiClientService = {
     return response.data
   },
 
-  changePassword: async (data: { old_password: string, password: string, confirmed_password: string }) => {
-    const response = await instanceAxios.put('/change-password/', data);
-    return response.data;
-  }
+  changePassword: async (data: {
+    old_password: string
+    password: string
+    confirmed_password: string
+  }) => {
+    const response = await instanceAxios.put('/change-password/', data)
+    return response.data
+  },
 }

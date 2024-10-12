@@ -1,8 +1,9 @@
 import { NavLayout } from '@/components/Layouts/NavLayout'
 
+import { apiClientService } from '@/services/clientApi'
+
 import { Articles } from '@/app/(home)/_components'
-import { getAuth } from '@/app/providers/getAuth'
-import { apiClientService } from '@/app/services/clientApi'
+import { getAuth } from '@/providers/getAuth'
 
 
 export default async function ArticlesPage() {

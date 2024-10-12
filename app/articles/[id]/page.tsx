@@ -2,9 +2,10 @@ import type { Metadata } from 'next'
 
 import { NavLayout } from '@/components/Layouts/NavLayout'
 
+import { apiClientService } from '@/services/clientApi'
+
 import { ArticleDetails, EditArticleForm } from '@/app/articles/[id]/_components'
-import { getAuth } from '@/app/providers/getAuth'
-import { apiClientService } from '@/app/services/clientApi'
+import { getAuth } from '@/providers/getAuth'
 import { Params } from '@/types'
 
 

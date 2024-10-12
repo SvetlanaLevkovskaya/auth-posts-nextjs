@@ -1,7 +1,7 @@
 import { NavLayout } from '@/components/Layouts/NavLayout'
 import { ButtonNotFound } from '@/components/NotFound/ButtonNotFound'
 
-import { getAuth } from '@/app/providers/getAuth'
+import { getAuth } from '@/providers/getAuth'
 
 
 export default async function NotFoundPage() {
