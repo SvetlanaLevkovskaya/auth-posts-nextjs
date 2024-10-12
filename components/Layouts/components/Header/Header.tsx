@@ -1,5 +1,3 @@
-import { FC } from 'react'
-
 import { useStore } from '@nanostores/react'
 import { useRouter } from 'next/navigation'
 
@@ -12,11 +10,7 @@ import styles from './Header.module.css'
 import { logout, userStore } from '@/stores/userStore'
 
 
-type Props = {
-  isAuth: boolean
-}
-
-export const Header: FC<Props> = ({ isAuth }) => {
+export const Header = () => {
   const router = useRouter()
 
   const { username } = useStore(userStore)
@@ -38,11 +32,9 @@ export const Header: FC<Props> = ({ isAuth }) => {
           <Button color="grey" onClick={handleLogoClick}>
             LOGO
           </Button>
-          {isAuth && (
-            <Button color="purple" onClick={handleLogout}>
-              Logout
-            </Button>
-          )}
+          <Button color="purple" onClick={handleLogout}>
+            Logout
+          </Button>
         </div>
       </div>
     </div>

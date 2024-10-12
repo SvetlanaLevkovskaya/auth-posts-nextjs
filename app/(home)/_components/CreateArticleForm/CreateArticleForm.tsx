@@ -9,11 +9,13 @@ import { Button, Input, Spinner, customToastSuccess } from '@/components/ui'
 
 import { apiClientService } from '@/services/clientApi'
 
+import { useArticles } from '@/providers/ArticlesProvider'
 import { ArticleFormData } from '@/types'
 import { createArticleValidationSchema } from '@/utils'
 
 
 export const CreateArticleForm = () => {
+  const { addArticle } = useArticles()
   const {
     register,
     handleSubmit,
@@ -30,7 +32,9 @@ export const CreateArticleForm = () => {
     if (data.image && data.image.length > 0) {
       formData.append('image', data.image[0])
     }
-    await apiClientService.createArticle(formData)
+    const newArticle = await apiClientService.createArticle(formData)
+    await apiClientService.getAllArticles()
+    addArticle(newArticle)
     customToastSuccess(`Статья успешно создана!`)
   }
 

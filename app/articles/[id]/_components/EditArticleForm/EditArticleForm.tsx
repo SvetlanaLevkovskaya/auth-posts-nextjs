@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect } from 'react'
+import { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -9,15 +9,13 @@ import { Button, Input, Spinner, TextArea, customToastSuccess } from '@/componen
 
 import { apiClientService } from '@/services/clientApi'
 
-import { Article, ArticleFormData } from '@/types'
+import { useArticle } from '@/providers/ArticleProvider'
+import { ArticleFormData } from '@/types'
 import { editArticleValidationSchema } from '@/utils'
 
 
-type Props = {
-  article: Article
-}
-
-export const EditArticleForm: FC<Props> = ({ article }) => {
+export const EditArticleForm = () => {
+  const { article, setArticle } = useArticle()
   const {
     register,
     handleSubmit,
@@ -28,11 +26,15 @@ export const EditArticleForm: FC<Props> = ({ article }) => {
   })
 
   useEffect(() => {
-    setValue('title', article.title)
-    setValue('content', article.content)
+    if (article) {
+      setValue('title', article.title)
+      setValue('content', article.content)
+    }
   }, [article, setValue])
 
   const onSubmit: SubmitHandler<ArticleFormData> = async (data) => {
+    if (!article) return
+
     const formData = new FormData()
     formData.append('title', data.title)
     formData.append('content', data.content)
@@ -41,6 +43,8 @@ export const EditArticleForm: FC<Props> = ({ article }) => {
       formData.append('image', data.image[0])
     }
     await apiClientService.updateArticle(article.id, formData)
+    const updatedArticle = await apiClientService.getAllArticleById(article.id)
+    setArticle(updatedArticle)
     customToastSuccess(`Статья успешно обновлена!`)
   }
 
