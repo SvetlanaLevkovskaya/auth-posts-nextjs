@@ -13,7 +13,7 @@ export const handleApiError = (error: unknown): string => {
 
   if (axios.isAxiosError(error)) {
     if (error.response) {
-      console.error('API Error:', error.response.data.username[0])
+      console.error('API Error:', error.response)
       errorMessage =
         error.response.data?.detail ||
         error.response.data?.old_password?.[0] ||
