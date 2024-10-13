@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 import { Button, Input, Spinner, TextArea, customToastSuccess } from '@/components/ui'
 
-import { apiClientService } from '@/services/clientApi'
+import { apiClientService } from '@/services/apiClientService'
 
 import { useArticle } from '@/providers/ArticleProvider'
 import { ArticleFormData } from '@/types'

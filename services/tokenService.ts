@@ -2,7 +2,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 
 
-export const refreshAccessToken = async () => {
+export const tokenService = async () => {
   try {
     const refresh = Cookies.get('refresh_token')
 

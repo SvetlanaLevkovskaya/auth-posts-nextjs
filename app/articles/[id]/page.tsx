@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 import { NavLayout } from '@/components/Layouts/NavLayout'
 
-import { apiClientService } from '@/services/clientApi'
+import { apiClientService } from '@/services/apiClientService'
 
 import { ArticleDetails, EditArticleForm } from '@/app/articles/[id]/_components'
 import { ArticleProvider } from '@/providers/ArticleProvider'

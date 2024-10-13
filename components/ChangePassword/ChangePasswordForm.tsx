@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 import { Button, Input, customToastSuccess } from '@/ui/index'
 
-import { apiClientService } from '@/services/clientApi'
+import { apiClientService } from '@/services/apiClientService'
 
 import { ChangePasswordFormData } from '@/types'
 import { changePasswordValidationSchema } from '@/utils'
@@ -38,27 +38,27 @@ export const ChangePasswordForm = () => {
   return (
     <div className="flex-center-center min-h-screen">
       <div className="w-full max-w-md p-8 bg-white shadow-md rounded-md">
-        <form onSubmit={ handleSubmit(onSubmit) } className="flex flex-col gap-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
           <Input
-            register={ register('old_password') }
+            register={register('old_password')}
             placeholder="Old password"
             type="password"
-            error={ errors.old_password?.message }
+            error={errors.old_password?.message}
             autofocus
           />
           <Input
-            register={ register('password') }
+            register={register('password')}
             placeholder="New password"
             type="password"
-            error={ errors.password?.message }
+            error={errors.password?.message}
           />
           <Input
-            register={ register('confirmed_password') }
+            register={register('confirmed_password')}
             placeholder="Confirm new password"
             type="password"
-            error={ errors.confirmed_password?.message }
+            error={errors.confirmed_password?.message}
           />
-          <Button color="neon" className="w-full" disabled={ isSubmitting }>
+          <Button color="neon" className="w-full" disabled={isSubmitting}>
             Change Password
           </Button>
         </form>

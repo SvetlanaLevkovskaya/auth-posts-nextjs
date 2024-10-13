@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation'
 
 import { Button, Input, customToastSuccess } from '@/ui/index'
 
-import { apiClientService } from '@/services/clientApi'
+import { apiClientService } from '@/services/apiClientService'
 
 import { login } from '@/stores/userStore'
 import { registrationValidationSchema } from '@/utils'

@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 import { Button, Input, Spinner, customToastSuccess } from '@/components/ui'
 
-import { apiClientService } from '@/services/clientApi'
+import { apiClientService } from '@/services/apiClientService'
 
 import { useArticles } from '@/providers/ArticlesProvider'
 import { ArticleFormData } from '@/types'
@@ -19,6 +19,7 @@ export const CreateArticleForm = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<ArticleFormData>({
     resolver: yupResolver(createArticleValidationSchema),
@@ -33,8 +34,8 @@ export const CreateArticleForm = () => {
       formData.append('image', data.image[0])
     }
     const newArticle = await apiClientService.createArticle(formData)
-    await apiClientService.getAllArticles()
     addArticle(newArticle)
+    reset()
     customToastSuccess(`Статья успешно создана!`)
   }
 

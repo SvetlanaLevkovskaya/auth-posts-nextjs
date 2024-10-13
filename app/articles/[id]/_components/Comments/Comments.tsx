@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, KeyboardEvent, useEffect, useState } from 'react'
+import { FC, KeyboardEvent, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { customToastSuccess } from '@/components/ui'
@@ -8,7 +8,7 @@ import { customToastSuccess } from '@/components/ui'
 import { Button } from '@/ui/Button/Button'
 import { Input } from '@/ui/Input/Input'
 
-import { apiClientService } from '@/services/clientApi'
+import { apiClientService } from '@/services/apiClientService'
 
 import { CommentCard } from '@/app/articles/[id]/_components'
 import { Comment, CommentFormData } from '@/types'
@@ -21,7 +21,6 @@ type Props = {
 
 export const Comments: FC<Props> = ({ articleId, initialComments }) => {
   const [comments, setComments] = useState<Comment[]>(initialComments)
-  const [hydrated, setHydrated] = useState(false)
 
   const {
     register,
@@ -31,10 +30,6 @@ export const Comments: FC<Props> = ({ articleId, initialComments }) => {
   } = useForm<CommentFormData>({
     defaultValues: { content: '' },
   })
-
-  useEffect(() => {
-    setHydrated(true)
-  }, [])
 
   const handleAddComment = async (data: CommentFormData) => {
     const newComment = await apiClientService.addCommentToArticle(articleId, {
@@ -50,10 +45,6 @@ export const Comments: FC<Props> = ({ articleId, initialComments }) => {
       e.preventDefault()
       handleSubmit(handleAddComment)()
     }
-  }
-
-  if (!hydrated) {
-    return null
   }
 
   return (

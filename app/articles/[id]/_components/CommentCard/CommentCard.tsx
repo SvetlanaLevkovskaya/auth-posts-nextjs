@@ -4,7 +4,7 @@ import { FC, useState } from 'react'
 
 import { Button, customToastSuccess } from '@/components/ui'
 
-import { apiClientService } from '@/services/clientApi'
+import { apiClientService } from '@/services/apiClientService'
 
 import {
   CommentChildren,
