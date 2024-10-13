@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -10,18 +11,23 @@ import { Button, Input, customToastError, customToastSuccess } from '@/ui/index'
 
 import { apiClientService } from '@/services/apiClientService'
 
+import { useClearErrorsOnOutsideClick } from '@/hooks'
 import { ChangePasswordFormData } from '@/types'
 import { changePasswordValidationSchema } from '@/utils'
 
 
 export const ChangePasswordForm = () => {
+  const formRef = useRef<HTMLFormElement | null>(null)
   const {
     register,
     handleSubmit,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<ChangePasswordFormData>({
     resolver: yupResolver(changePasswordValidationSchema),
   })
+
+  useClearErrorsOnOutsideClick(formRef, clearErrors)
 
   const onSubmit: SubmitHandler<ChangePasswordFormData> = async (data) => {
     try {
@@ -47,7 +53,7 @@ export const ChangePasswordForm = () => {
   return (
     <div className="flex-center-center min-h-screen">
       <div className="w-full max-w-md p-8 bg-white shadow-md rounded-md">
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
           <Input
             register={register('old_password')}
             placeholder="Old password"

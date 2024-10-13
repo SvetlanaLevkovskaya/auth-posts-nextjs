@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -11,6 +12,7 @@ import { Button, Input, customToastError, customToastSuccess } from '@/ui/index'
 
 import { apiClientService } from '@/services/apiClientService'
 
+import { useClearErrorsOnOutsideClick } from '@/hooks'
 import { login } from '@/stores/userStore'
 import { registrationValidationSchema } from '@/utils'
 
@@ -25,14 +27,18 @@ interface RegistrationFormData {
 
 export const RegistrationForm = () => {
   const router = useRouter()
+  const formRef = useRef<HTMLFormElement | null>(null)
 
   const {
     register,
     handleSubmit,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<RegistrationFormData>({
     resolver: yupResolver(registrationValidationSchema),
   })
+
+  useClearErrorsOnOutsideClick(formRef, clearErrors)
 
   const onSubmit: SubmitHandler<RegistrationFormData> = async ({
     username,
@@ -67,6 +73,7 @@ export const RegistrationForm = () => {
     <div className="flex-center-center min-h-screen">
       <div className="w-full max-w-md p-8 bg-white shadow-md rounded-md">
         <form
+          ref={formRef}
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-5"
           autoComplete="off"

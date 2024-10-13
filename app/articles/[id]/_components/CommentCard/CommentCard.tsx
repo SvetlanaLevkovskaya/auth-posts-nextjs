@@ -41,7 +41,7 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          customToastError(error.response.data?.detail)
+          customToastError(error.response.data?.content[0])
         }
       }
     }
@@ -62,7 +62,7 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          customToastError(error.response.data)
+          customToastError(error.response.data.content[0])
         }
       }
     }

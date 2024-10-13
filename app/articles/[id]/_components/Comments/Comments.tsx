@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, KeyboardEvent, useState } from 'react'
+import { FC, KeyboardEvent, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { customToastSuccess } from '@/components/ui'
@@ -11,6 +11,7 @@ import { Input } from '@/ui/Input/Input'
 import { apiClientService } from '@/services/apiClientService'
 
 import { CommentCard } from '@/app/articles/[id]/_components'
+import { useClearErrorsOnOutsideClick } from '@/hooks'
 import { Comment, CommentFormData } from '@/types'
 
 
@@ -21,15 +22,19 @@ type Props = {
 
 export const Comments: FC<Props> = ({ articleId, initialComments }) => {
   const [comments, setComments] = useState<Comment[]>(initialComments)
+  const formRef = useRef<HTMLFormElement | null>(null)
 
   const {
     register,
     handleSubmit,
     reset,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<CommentFormData>({
     defaultValues: { content: '' },
   })
+
+  useClearErrorsOnOutsideClick(formRef, clearErrors)
 
   const handleAddComment = async (data: CommentFormData) => {
     const newComment = await apiClientService.addCommentToArticle(articleId, {
@@ -51,7 +56,7 @@ export const Comments: FC<Props> = ({ articleId, initialComments }) => {
     <div className="mt-8">
       <h2 className="text-s_text font-bold mb-4">Comments ({comments?.length})</h2>
 
-      <form onSubmit={handleSubmit(handleAddComment)} className="flex items-start gap-4 mb-4">
+      <form  ref={formRef} onSubmit={handleSubmit(handleAddComment)} className="flex items-start gap-4 mb-4">
         <Input
           register={register('content', { required: 'Field is required.' })}
           placeholder="Write your comment..."

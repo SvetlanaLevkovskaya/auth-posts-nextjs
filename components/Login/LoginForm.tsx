@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -11,19 +12,24 @@ import { Button, Input, customToastError, customToastSuccess } from '@/ui/index'
 
 import { apiClientService } from '@/services/apiClientService'
 
+import { useClearErrorsOnOutsideClick } from '@/hooks'
 import { login } from '@/stores/userStore'
 import { FormData } from '@/types'
 import { loginValidationSchema } from '@/utils'
 
 
 export const LoginForm = () => {
+  const formRef = useRef<HTMLFormElement | null>(null)
   const {
     register,
     handleSubmit,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: yupResolver(loginValidationSchema),
   })
+
+  useClearErrorsOnOutsideClick(formRef, clearErrors)
 
   const onSubmit: SubmitHandler<FormData> = async ({ username, password }) => {
     try {
@@ -50,6 +56,7 @@ export const LoginForm = () => {
     <div className="flex-center-center min-h-screen">
       <div className="w-full max-w-md p-8 bg-white shadow-md rounded-md">
         <form
+          ref={formRef}
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-5"
           autoComplete="off"

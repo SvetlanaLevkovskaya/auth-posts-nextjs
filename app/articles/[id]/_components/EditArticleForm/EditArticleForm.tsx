@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -17,6 +17,7 @@ import {
 
 import { apiClientService } from '@/services/apiClientService'
 
+import { useClearErrorsOnOutsideClick } from '@/hooks'
 import { useArticle } from '@/providers/ArticleProvider'
 import { ArticleFormData } from '@/types'
 import { editArticleValidationSchema } from '@/utils'
@@ -24,10 +25,12 @@ import { editArticleValidationSchema } from '@/utils'
 
 export const EditArticleForm = () => {
   const { article, setArticle } = useArticle()
+  const formRef = useRef<HTMLFormElement | null>(null)
   const {
     register,
     handleSubmit,
     setValue,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<ArticleFormData>({
     resolver: yupResolver(editArticleValidationSchema),
@@ -39,6 +42,8 @@ export const EditArticleForm = () => {
       setValue('content', article.content)
     }
   }, [article, setValue])
+
+  useClearErrorsOnOutsideClick(formRef, clearErrors)
 
   const onSubmit: SubmitHandler<ArticleFormData> = async (data) => {
     try {
@@ -67,7 +72,7 @@ export const EditArticleForm = () => {
   return (
     <div className="flex justify-end mx-9 self-start">
       <div className="w-full max-w-md p-8 bg-gray-2 rounded-md">
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <Input
             label={'Title:'}
             register={register('title')}
