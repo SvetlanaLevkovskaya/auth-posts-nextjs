@@ -1,18 +1,26 @@
 'use client'
 
+import { FC } from 'react'
+
 import { ImageWithFallback } from '@/components/ui'
 
-import { Comments } from '@/app/articles/[id]/_components'
+import { Comments, EditArticleForm } from '@/app/articles/[id]/_components'
 import { useArticle } from '@/providers/ArticleProvider'
 import { Comment } from '@/types'
 import { hasLongWord } from '@/utils'
 
 
-export const ArticleDetails = ({ comments }: { comments: Comment[] }) => {
+type Props = {
+  comments: Comment[]
+  currentUser?: string
+}
+
+export const ArticleDetails: FC<Props> = ({ comments, currentUser }) => {
   const { article } = useArticle()
 
   if (!article) return null
   const shouldBreakAll = hasLongWord(article.content)
+  const isAuthor = article.author.username === currentUser
 
   return (
     <>
@@ -29,9 +37,11 @@ export const ArticleDetails = ({ comments }: { comments: Comment[] }) => {
         </div>
 
         <div className="container mx-auto p-4 mt-8 bg-gray-1 rounded-lg shadow-md">
-          <Comments initialComments={comments} articleId={article.id} />
+          <Comments initialComments={comments} articleId={article.id} currentUser={currentUser}/>
         </div>
       </div>
+
+      {isAuthor && <EditArticleForm />}
     </>
   )
 }

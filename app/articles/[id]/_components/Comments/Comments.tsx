@@ -18,9 +18,10 @@ import { Comment, CommentFormData } from '@/types'
 type Props = {
   articleId: number
   initialComments: Comment[]
+  currentUser?: string | null
 }
 
-export const Comments: FC<Props> = ({ articleId, initialComments }) => {
+export const Comments: FC<Props> = ({ articleId, initialComments, currentUser }) => {
   const [comments, setComments] = useState<Comment[]>(initialComments)
   const formRef = useRef<HTMLFormElement | null>(null)
 
@@ -73,7 +74,7 @@ export const Comments: FC<Props> = ({ articleId, initialComments }) => {
 
       <ul className="space-y-4">
         {comments.map((comment, index) => (
-          <CommentCard key={`${comment.id}-${index}`} comment={comment} articleId={articleId} />
+          <CommentCard key={`${comment.id}-${index}`} comment={comment} articleId={articleId} currentUser={currentUser}/>
         ))}
       </ul>
     </div>

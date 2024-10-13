@@ -4,8 +4,9 @@ import { NavLayout } from '@/components/Layouts/NavLayout'
 
 import { apiClientService } from '@/services/apiClientService'
 
-import { ArticleDetails, EditArticleForm } from '@/app/articles/[id]/_components'
+import { ArticleDetails } from '@/app/articles/[id]/_components'
 import { ArticleProvider } from '@/providers/ArticleProvider'
+import { getAuth } from '@/providers/getAuth'
 import { Params } from '@/types'
 
 
@@ -15,6 +16,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 export default async function ArticlePage({ params }: Params) {
   const { id } = params
+  const { username } = getAuth()
 
   const article = await apiClientService.getAllArticleById(id)
   const comments = await apiClientService.getCommentsByArticleId(id)
@@ -22,8 +24,7 @@ export default async function ArticlePage({ params }: Params) {
   return (
     <NavLayout>
       <ArticleProvider initialArticle={article}>
-        <ArticleDetails comments={comments} />
-        <EditArticleForm />
+        <ArticleDetails comments={comments} currentUser={username} />
       </ArticleProvider>
     </NavLayout>
   )

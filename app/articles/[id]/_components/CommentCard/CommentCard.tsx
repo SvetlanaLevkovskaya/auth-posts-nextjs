@@ -20,9 +20,10 @@ import { formattedDate } from '@/utils'
 type Props = {
   comment: Comment
   articleId: number
+  currentUser?: string | null
 }
 
-export const CommentCard: FC<Props> = ({ comment, articleId }) => {
+export const CommentCard: FC<Props> = ({ comment, articleId, currentUser }) => {
   const [currentComment, setCurrentComment] = useState<Comment>(comment)
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [isReplying, setIsReplying] = useState<boolean>(false)
@@ -82,12 +83,12 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
             {currentComment.content}
           </p>
           <small className="text-gray-4 block mt-2">
-            {currentComment?.author?.username || 'Anonymous'}
+            {currentComment?.author?.username || currentUser }
           </small>
           <small className="text-gray-4 block mt-1">
             {currentComment.updated !== currentComment.created
               ? `Updated: ${formattedDate(currentComment.updated)}`
-              : `Published: ${formattedDate(currentComment.created)}`}
+              : `Published: ${formattedDate(currentComment.created)} `}
           </small>
           <Button
             color="grey"
