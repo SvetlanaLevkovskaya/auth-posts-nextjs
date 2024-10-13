@@ -3,10 +3,11 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
+import axios from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-import { Button, Input, customToastSuccess } from '@/ui/index'
+import { Button, Input, customToastError, customToastSuccess } from '@/ui/index'
 
 import { apiClientService } from '@/services/apiClientService'
 
@@ -40,18 +41,26 @@ export const RegistrationForm = () => {
     firstName,
     lastName,
   }) => {
-    await apiClientService.registration({
-      username,
-      password,
-      email,
-      first_name: firstName,
-      last_name: lastName,
-    })
+    try {
+      await apiClientService.registration({
+        username,
+        password,
+        email,
+        first_name: firstName,
+        last_name: lastName,
+      })
 
-    login(username, password)
+      login(username, password)
 
-    customToastSuccess(`User ${username} registered successfully`)
-    router.push('/')
+      customToastSuccess(`User ${username} registered successfully`)
+      router.push('/')
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          customToastError(error.response.data?.username?.[0])
+        }
+      }
+    }
   }
 
   return (

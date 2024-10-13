@@ -19,6 +19,8 @@ export const apiClientService = {
     const response = await instanceAxios.post(ApiRoutes.articles, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
+
+    console.log('response.data', response.data)
     return response.data
   },
 

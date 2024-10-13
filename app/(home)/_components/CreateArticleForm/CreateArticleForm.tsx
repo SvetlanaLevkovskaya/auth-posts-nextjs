@@ -34,45 +34,44 @@ export const CreateArticleForm = () => {
       formData.append('image', data.image[0])
     }
     const newArticle = await apiClientService.createArticle(formData)
+
     addArticle(newArticle)
     reset()
     customToastSuccess(`Статья успешно создана!`)
   }
 
   return (
-    <div className="flex justify-end mx-9">
-      <div className="w-full max-w-md p-8 bg-gray-2 rounded-md">
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <Input
-            label={'Title:'}
-            register={register('title')}
-            placeholder="Title"
-            error={errors.title?.message}
-            disabled={isSubmitting}
-          />
+    <div className=" flex self-start  max-w-md p-8 bg-gray-2 rounded-md">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <Input
+          label={'Title:'}
+          register={register('title')}
+          placeholder="Title"
+          error={errors.title?.message}
+          disabled={isSubmitting}
+        />
 
-          <Input
-            label={'Content:'}
-            register={register('content')}
-            placeholder="Content"
-            error={errors.content?.message}
-            disabled={isSubmitting}
-          />
+        <Input
+          label={'Content:'}
+          register={register('content')}
+          placeholder="Content"
+          error={errors.content?.message}
+          disabled={isSubmitting}
+        />
 
-          <Input
-            type="file"
-            label={'Image (optional):'}
-            register={register('image')}
-            error={errors.image?.message}
-            disabled={isSubmitting}
-            accept="image/*"
-          />
+        <Input
+          type="file"
+          label={'Image (optional):'}
+          register={register('image')}
+          error={errors.image?.message}
+          disabled={isSubmitting}
+          accept="image/*"
+        />
 
-          <Button color="neon" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? <Spinner /> : 'Create an article'}
-          </Button>
-        </form>
-      </div>
+        <Button color="neon" className="w-full" disabled={isSubmitting}>
+          {isSubmitting ? <Spinner /> : 'Create an article'}
+        </Button>
+      </form>
     </div>
   )
 }

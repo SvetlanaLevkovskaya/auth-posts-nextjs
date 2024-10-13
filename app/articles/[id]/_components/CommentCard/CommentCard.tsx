@@ -2,7 +2,9 @@
 
 import { FC, useState } from 'react'
 
-import { Button, customToastSuccess } from '@/components/ui'
+import axios from 'axios'
+
+import { Button, customToastError, customToastSuccess } from '@/components/ui'
 
 import { apiClientService } from '@/services/apiClientService'
 
@@ -26,28 +28,44 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
   const [isReplying, setIsReplying] = useState<boolean>(false)
 
   const handleContentUpdated = async (data: CommentFormData) => {
-    await apiClientService.updateCommentContent(articleId, currentComment.id, {
-      content: data.content,
-    })
-    setCurrentComment((prevComment) => ({
-      ...prevComment,
-      content: data.content,
-    }))
-    setIsEditing(false)
-    customToastSuccess('Комментарий успешно обновлен')
+    try {
+      await apiClientService.updateCommentContent(articleId, currentComment.id, {
+        content: data.content,
+      })
+      setCurrentComment((prevComment) => ({
+        ...prevComment,
+        content: data.content,
+      }))
+      setIsEditing(false)
+      customToastSuccess('Комментарий успешно обновлен')
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          customToastError(error.response.data?.detail)
+        }
+      }
+    }
   }
 
   const handleReply = async (data: CommentFormData) => {
-    const newReply = await apiClientService.addCommentToArticle(articleId, {
-      content: data.content,
-      parent: currentComment.id,
-    })
-    setCurrentComment((prevComment) => ({
-      ...prevComment,
-      children: [...prevComment.children, newReply],
-    }))
-    setIsReplying(false)
-    customToastSuccess('Ответ на комментарий успешно добавлен')
+    try {
+      const newReply = await apiClientService.addCommentToArticle(articleId, {
+        content: data.content,
+        parent: currentComment.id,
+      })
+      setCurrentComment((prevComment) => ({
+        ...prevComment,
+        children: [...prevComment.children, newReply],
+      }))
+      setIsReplying(false)
+      customToastSuccess('Ответ на комментарий успешно добавлен')
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          customToastError(error.response.data)
+        }
+      }
+    }
   }
 
   return (

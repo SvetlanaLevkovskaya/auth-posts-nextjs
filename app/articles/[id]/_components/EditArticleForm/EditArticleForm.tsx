@@ -4,8 +4,16 @@ import { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
+import axios from 'axios'
 
-import { Button, Input, Spinner, TextArea, customToastSuccess } from '@/components/ui'
+import {
+  Button,
+  Input,
+  Spinner,
+  TextArea,
+  customToastError,
+  customToastSuccess,
+} from '@/components/ui'
 
 import { apiClientService } from '@/services/apiClientService'
 
@@ -33,19 +41,27 @@ export const EditArticleForm = () => {
   }, [article, setValue])
 
   const onSubmit: SubmitHandler<ArticleFormData> = async (data) => {
-    if (!article) return
+    try {
+      if (!article) return
 
-    const formData = new FormData()
-    formData.append('title', data.title)
-    formData.append('content', data.content)
+      const formData = new FormData()
+      formData.append('title', data.title)
+      formData.append('content', data.content)
 
-    if (data.image && data.image.length > 0) {
-      formData.append('image', data.image[0])
+      if (data.image && data.image.length > 0) {
+        formData.append('image', data.image[0])
+      }
+      await apiClientService.updateArticle(article.id, formData)
+      const updatedArticle = await apiClientService.getAllArticleById(article.id)
+      setArticle(updatedArticle)
+      customToastSuccess(`Статья успешно обновлена!`)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          customToastError(error.response.data?.detail)
+        }
+      }
     }
-    await apiClientService.updateArticle(article.id, formData)
-    const updatedArticle = await apiClientService.getAllArticleById(article.id)
-    setArticle(updatedArticle)
-    customToastSuccess(`Статья успешно обновлена!`)
   }
 
   return (

@@ -1,10 +1,7 @@
 import axios from 'axios'
 
-import { customToastError } from '@/components/ui'
-
-
 export const handleApiError = (error: unknown): string => {
-  let errorMessage = 'Произошла неизвестная ошибка'
+  let errorMessage
 
   if (axios.isAxiosError(error)) {
     if (error.response) {
@@ -24,6 +21,5 @@ export const handleApiError = (error: unknown): string => {
     console.error('Unexpected Error:', error)
     errorMessage = 'An unexpected error occurred'
   }
-  customToastError(errorMessage)
   return errorMessage
 }
