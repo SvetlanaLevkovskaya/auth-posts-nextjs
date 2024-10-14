@@ -2,6 +2,7 @@
 
 import { FC, useState } from 'react'
 
+import { useStore } from '@nanostores/react'
 import axios from 'axios'
 
 import { Button, customToastError, customToastSuccess } from '@/components/ui'
@@ -13,6 +14,7 @@ import {
   CommentEditForm,
   CommentReplyForm,
 } from '@/app/articles/[id]/_components/CommentCardItems'
+import { userStore } from '@/stores/userStore'
 import { Comment, CommentFormData } from '@/types'
 import { formattedDate } from '@/utils'
 
@@ -20,13 +22,13 @@ import { formattedDate } from '@/utils'
 type Props = {
   comment: Comment
   articleId: number
-  currentUser?: string | null
 }
 
-export const CommentCard: FC<Props> = ({ comment, articleId, currentUser }) => {
+export const CommentCard: FC<Props> = ({ comment, articleId }) => {
   const [currentComment, setCurrentComment] = useState<Comment>(comment)
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [isReplying, setIsReplying] = useState<boolean>(false)
+  const { username } = useStore(userStore)
 
   const handleContentUpdated = async (data: CommentFormData) => {
     try {
@@ -42,7 +44,7 @@ export const CommentCard: FC<Props> = ({ comment, articleId, currentUser }) => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          customToastError(error.response.data?.content[0])
+          customToastError(error.response.data?.detail || error.response.data.content[0])
         }
       }
     }
@@ -63,7 +65,7 @@ export const CommentCard: FC<Props> = ({ comment, articleId, currentUser }) => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          customToastError(error.response.data.content[0])
+          customToastError(error.response.data?.detail || error.response.data.content[0])
         }
       }
     }
@@ -83,7 +85,7 @@ export const CommentCard: FC<Props> = ({ comment, articleId, currentUser }) => {
             {currentComment.content}
           </p>
           <small className="text-gray-4 block mt-2">
-            {currentComment?.author?.username || currentUser }
+            {currentComment?.author?.username || username }
           </small>
           <small className="text-gray-4 block mt-1">
             {currentComment.updated !== currentComment.created
