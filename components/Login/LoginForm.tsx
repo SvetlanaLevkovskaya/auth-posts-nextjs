@@ -13,8 +13,9 @@ import { Button, Input, customToastError, customToastSuccess } from '@/ui/index'
 import { apiClientService } from '@/services/apiClientService'
 
 import { useClearErrorsOnOutsideClick } from '@/hooks'
+import { AppRoutes } from '@/lib/api/routes'
 import { login } from '@/stores/userStore'
-import { FormData } from '@/types'
+import { LoginFormData } from '@/types'
 import { loginValidationSchema } from '@/utils'
 
 
@@ -25,13 +26,13 @@ export const LoginForm = () => {
     handleSubmit,
     clearErrors,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({
+  } = useForm<LoginFormData>({
     resolver: yupResolver(loginValidationSchema),
   })
 
   useClearErrorsOnOutsideClick(formRef, clearErrors)
 
-  const onSubmit: SubmitHandler<FormData> = async ({ username, password }) => {
+  const onSubmit: SubmitHandler<LoginFormData> = async ({ username, password }) => {
     try {
       const response = await apiClientService.login({ username, password })
       const { access, refresh } = response
@@ -42,7 +43,7 @@ export const LoginForm = () => {
       login(username, password)
 
       customToastSuccess(`User ${username} logged in`)
-      window.location.href = '/'
+      window.location.href = AppRoutes.articles
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
@@ -81,14 +82,14 @@ export const LoginForm = () => {
         </form>
         <p className="text-black mt-4">
           Don&apos;t have an account?
-          <Link href="/registration" className="link text-black ml-2">
+          <Link href={AppRoutes.registration} className="link text-black ml-2">
             Register
           </Link>
         </p>
 
         <p className="text-black mt-4">
           Forgot your password?
-          <Link href="/changePassword" className="link text-black ml-2">
+          <Link href={AppRoutes.changePassword} className="link text-black ml-2">
             Change Password
           </Link>
         </p>

@@ -16,7 +16,6 @@ import {
 } from '@/app/articles/[id]/_components/CommentCardItems'
 import { userStore } from '@/stores/userStore'
 import { Comment, CommentFormData } from '@/types'
-import { formattedDate } from '@/utils'
 
 
 type Props = {
@@ -35,12 +34,62 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
       await apiClientService.updateCommentContent(articleId, currentComment.id, {
         content: data.content,
       })
-      setCurrentComment((prevComment) => ({
-        ...prevComment,
-        content: data.content,
-      }))
+
+      const updatedComments = await apiClientService.getCommentsByArticleId(articleId)
+
+      const updateCommentById = (
+        comments: Comment[],
+        commentId: number,
+        updatedContent: string
+      ): Comment[] => {
+        return comments.map((comment) => {
+          if (comment.id === commentId) {
+            return { ...comment, content: updatedContent }
+          }
+          if (comment.children?.length) {
+            return {
+              ...comment,
+              children: updateCommentById(comment.children, commentId, updatedContent),
+            }
+          }
+          return comment
+        })
+      }
+
+      const findCommentById = (comments: Comment[], commentId: number): Comment | undefined => {
+        for (const comment of comments) {
+          if (comment.id === commentId) {
+            return comment
+          }
+          if (comment.children?.length) {
+            const foundInChildren = findCommentById(comment.children, commentId)
+            if (foundInChildren) {
+              return foundInChildren
+            }
+          }
+        }
+        return undefined
+      }
+
+      const updatedCommentsWithNewContent = updateCommentById(
+        updatedComments,
+        currentComment.id,
+        data.content
+      )
+
+      const updatedCurrentComment = findCommentById(
+        updatedCommentsWithNewContent,
+        currentComment.id
+      )
+
+      if (updatedCurrentComment) {
+        setCurrentComment(updatedCurrentComment)
+        customToastSuccess('Комментарий успешно обновлен')
+      } else {
+        customToastError('Не удалось обновить комментарий')
+      }
+
       setIsEditing(false)
-      customToastSuccess('Комментарий успешно обновлен')
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
@@ -52,16 +101,38 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
 
   const handleReply = async (data: CommentFormData) => {
     try {
-      const newReply = await apiClientService.addCommentToArticle(articleId, {
+      await apiClientService.addCommentToArticle(articleId, {
         content: data.content,
         parent: currentComment.id,
       })
-      setCurrentComment((prevComment) => ({
-        ...prevComment,
-        children: [...prevComment.children, newReply],
-      }))
+
+      const updatedComments = await apiClientService.getCommentsByArticleId(articleId)
+
+      const findCommentById = (comments: Comment[], commentId: number): Comment | undefined => {
+        for (const comment of comments) {
+          if (comment.id === commentId) {
+            return comment
+          }
+          if (comment.children?.length) {
+            const foundInChildren = findCommentById(comment.children, commentId)
+            if (foundInChildren) {
+              return foundInChildren
+            }
+          }
+        }
+        return undefined
+      }
+
+      const updatedCurrentComment = findCommentById(updatedComments, currentComment.id)
+
+      if (updatedCurrentComment) {
+        setCurrentComment(updatedCurrentComment)
+        customToastSuccess('Ответ на комментарий успешно добавлен')
+      } else {
+        customToastError('Не удалось обновить комментарий')
+      }
+
       setIsReplying(false)
-      customToastSuccess('Ответ на комментарий успешно добавлен')
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
@@ -85,12 +156,7 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
             {currentComment.content}
           </p>
           <small className="text-gray-4 block mt-2">
-            {currentComment?.author?.username || username }
-          </small>
-          <small className="text-gray-4 block mt-1">
-            {currentComment.updated !== currentComment.created
-              ? `Updated: ${formattedDate(currentComment.updated)}`
-              : `Published: ${formattedDate(currentComment.created)} `}
+            {currentComment?.author?.username || username}
           </small>
           <Button
             color="grey"

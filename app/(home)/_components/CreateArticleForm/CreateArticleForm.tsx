@@ -5,7 +5,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import { Button, Input, Spinner, customToastSuccess } from '@/components/ui'
+import { Button, Input, Spinner, customToastError, customToastSuccess } from '@/components/ui'
 
 import { apiClientService } from '@/services/apiClientService'
 
@@ -38,11 +38,25 @@ export const CreateArticleForm = () => {
     if (data.image && data.image.length > 0) {
       formData.append('image', data.image[0])
     }
-    const newArticle = await apiClientService.createArticle(formData)
+    try {
+      const newArticleData = await apiClientService.createArticle(formData);
+      const allArticles = await apiClientService.getAllArticles();
 
-    addArticle(newArticle)
-    reset()
-    customToastSuccess(`Статья успешно создана!`)
+      const createdArticle = allArticles.find(
+        (article) => article.title === newArticleData.title && article.content === newArticleData.content
+      );
+
+      if (createdArticle) {
+        addArticle(createdArticle);
+        customToastSuccess('Статья успешно создана и загружена!');
+      } else {
+        customToastError('Не удалось найти созданную статью.');
+      }
+      reset();
+    } catch (error) {
+      console.error('Ошибка при создании статьи:', error);
+      customToastError('Ошибка при создании статьи.');
+    }
   }
 
   return (

@@ -1,14 +1,16 @@
 export const ApiRoutes = {
   login: '/login',
-  me: '/me',
   articles: '/articles/',
   article: '/articles/',
+  token: '/token/',
+  registration: '/registration/',
+  changePassword: '/change-password/',
 
 }
 
 export const AppRoutes = {
   login: '/login',
-  me: '/me',
   articles: '/',
-
+  registration: '/registration',
+  changePassword: '/changePassword',
 }

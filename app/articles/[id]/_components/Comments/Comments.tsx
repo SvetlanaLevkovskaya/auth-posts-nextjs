@@ -3,7 +3,9 @@
 import { FC, KeyboardEvent, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { customToastSuccess } from '@/components/ui'
+import axios from 'axios'
+
+import { customToastError, customToastSuccess } from '@/components/ui'
 
 import { Button } from '@/ui/Button/Button'
 import { Input } from '@/ui/Input/Input'
@@ -37,12 +39,22 @@ export const Comments: FC<Props> = ({ articleId, initialComments }) => {
   useClearErrorsOnOutsideClick(formRef, clearErrors)
 
   const handleAddComment = async (data: CommentFormData) => {
-    const newComment = await apiClientService.addCommentToArticle(articleId, {
-      content: data.content,
-    })
-    setComments((prevComments) => [...prevComments, newComment])
-    reset()
-    customToastSuccess('Комментарий успешно добавлен!')
+    try {
+     await apiClientService.addCommentToArticle(articleId, {
+        content: data.content,
+        parent: data.parent || null,
+      })
+
+      const updatedComments = await apiClientService.getCommentsByArticleId(articleId)
+
+      setComments(updatedComments)
+      reset()
+      customToastSuccess('Комментарий успешно добавлен!')
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        customToastError(error.response.data?.detail || 'Ошибка при добавлении комментария')
+      }
+    }
   }
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {

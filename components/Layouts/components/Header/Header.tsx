@@ -7,6 +7,7 @@ import { customToastSuccess } from '@/ui/CustomToast/CustomToast'
 
 import styles from './Header.module.css'
 
+import { AppRoutes } from '@/lib/api/routes'
 import { logout, userStore } from '@/stores/userStore'
 
 
@@ -17,12 +18,12 @@ export const Header = () => {
 
   const handleLogout = () => {
     logout()
-    router.push('/login')
+    router.push(AppRoutes.login)
     customToastSuccess(`User ${username} logged out`)
   }
 
   const handleLogoClick = () => {
-    router.push('/')
+    router.push(AppRoutes.articles)
   }
 
   return (

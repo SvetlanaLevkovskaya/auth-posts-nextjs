@@ -10,7 +10,7 @@ export const registrationValidationSchema = yup.object().shape({
     .string()
     .required('Password is required.')
     .min(3, 'Password must be at least 3 characters.')
-    .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
+    .matches(/^[a-zA-Z0-9]+$/, 'Password can only contain Latin letters and numbers.'),
   email: yup
     .string()
     .required('Email is required.')

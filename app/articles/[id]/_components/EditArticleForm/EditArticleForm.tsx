@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -24,6 +24,7 @@ import { editArticleValidationSchema } from '@/utils'
 
 
 export const EditArticleForm = () => {
+  const [isHydrated, setIsHydrated] = useState(false)
   const { article, setArticle } = useArticle()
   const formRef = useRef<HTMLFormElement | null>(null)
   const {
@@ -37,11 +38,15 @@ export const EditArticleForm = () => {
   })
 
   useEffect(() => {
-    if (article) {
+    setIsHydrated(true)
+  }, [])
+
+  useEffect(() => {
+    if (isHydrated && article) {
       setValue('title', article.title)
       setValue('content', article.content)
     }
-  }, [article, setValue])
+  }, [article, setValue, isHydrated])
 
   useClearErrorsOnOutsideClick(formRef, clearErrors)
 
@@ -58,6 +63,7 @@ export const EditArticleForm = () => {
       }
       await apiClientService.updateArticle(article.id, formData)
       const updatedArticle = await apiClientService.getAllArticleById(article.id)
+      console.log('updatedArticle', updatedArticle)
       setArticle(updatedArticle)
       customToastSuccess(`Статья успешно обновлена!`)
     } catch (error) {
@@ -67,6 +73,10 @@ export const EditArticleForm = () => {
         }
       }
     }
+  }
+
+  if (!isHydrated) {
+    return null
   }
 
   return (

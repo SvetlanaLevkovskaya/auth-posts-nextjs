@@ -1,79 +1,103 @@
 import instanceAxios from '@/services/axiosInstance'
 
 import { ApiRoutes } from '@/lib/api/routes'
-import { CommentFormData } from '@/types'
-
+import {
+  Article,
+  ChangePasswordFormData,
+  ChangePasswordResponse,
+  Comment,
+  CommentFormData,
+  CreateAndUpdateArticleResponse,
+  CreateAndUpdateCommentResponse,
+  LoginFormData,
+  LoginResponse,
+  RegistrationRequest,
+  RegistrationResponse,
+} from '@/types'
 
 export const apiClientService = {
-  getAllArticles: async () => {
-    const response = await instanceAxios.get(ApiRoutes.articles)
+  getAllArticles: async (): Promise<Article[]> => {
+    const response = await instanceAxios.get<Article[]>(ApiRoutes.articles)
     return response.data
   },
 
-  getAllArticleById: async (id: string | number) => {
-    const response = await instanceAxios.get(`${ApiRoutes.article}${id}`)
+  getAllArticleById: async (id: string | number): Promise<Article> => {
+    const response = await instanceAxios.get<Article>(`${ApiRoutes.article}${id}`)
     return response.data
   },
 
-  createArticle: async (data: FormData) => {
-    const response = await instanceAxios.post(ApiRoutes.articles, data, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    })
-
-    console.log('response.data', response.data)
+  createArticle: async (data: FormData): Promise<CreateAndUpdateArticleResponse> => {
+    const response = await instanceAxios.post<CreateAndUpdateArticleResponse>(
+      ApiRoutes.articles,
+      data,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }
+    )
     return response.data
   },
 
-  updateArticle: async (id: number, data: FormData) => {
-    const response = await instanceAxios.put(`${ApiRoutes.article}${id}/`, data, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    })
+  updateArticle: async (id: number, data: FormData): Promise<CreateAndUpdateArticleResponse> => {
+    const response = await instanceAxios.put<CreateAndUpdateArticleResponse>(
+      `${ApiRoutes.article}${id}/`,
+      data,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }
+    )
     return response.data
   },
 
-  getCommentsByArticleId: async (articleId: string | number) => {
-    const response = await instanceAxios.get(`${ApiRoutes.articles}${articleId}/comments/`)
+  getCommentsByArticleId: async (articleId: string | number): Promise<Comment[]> => {
+    const response = await instanceAxios.get<Comment[]>(
+      `${ApiRoutes.articles}${articleId}/comments/`
+    )
     return response.data
   },
 
-  addCommentToArticle: async (articleId: string | number, data: CommentFormData) => {
-    const response = await instanceAxios.post(`${ApiRoutes.articles}${articleId}/comments/`, data)
+  addCommentToArticle: async (
+    articleId: string | number,
+    data: CommentFormData
+  ): Promise<CreateAndUpdateCommentResponse> => {
+    const response = await instanceAxios.post<CreateAndUpdateCommentResponse>(
+      `${ApiRoutes.articles}${articleId}/comments/`,
+      data
+    )
     return response.data
   },
+
   updateCommentContent: async (
     articleId: string | number,
     commentId: number,
     data: CommentFormData
-  ) => {
-    const response = await instanceAxios.put(
+  ): Promise<CreateAndUpdateCommentResponse> => {
+    const response = await instanceAxios.put<CreateAndUpdateCommentResponse>(
       `${ApiRoutes.articles}${articleId}/comments/${commentId}/`,
       data
     )
     return response.data
   },
 
-  login: async (data: { username: string; password: string }) => {
-    const response = await instanceAxios.post(`/token/`, data)
+  login: async (data: LoginFormData): Promise<LoginResponse> => {
+    const response = await instanceAxios.post<LoginResponse>(`${ApiRoutes.token}`, data)
+    console.log('response.data', response.data)
     return response.data
   },
 
-  registration: async (data: {
-    username: string
-    password: string
-    email: string
-    first_name: string
-    last_name: string
-  }) => {
-    const response = await instanceAxios.post(`/registration/`, data)
+  registration: async (data: RegistrationRequest): Promise<RegistrationResponse> => {
+    const response = await instanceAxios.post<RegistrationResponse>(
+      `${ApiRoutes.registration}`,
+      data
+    )
     return response.data
   },
 
-  changePassword: async (data: {
-    old_password: string
-    password: string
-    confirmed_password: string
-  }) => {
-    const response = await instanceAxios.put('/change-password/', data)
-    return response.data
+  changePassword: async (data: ChangePasswordFormData): Promise<{ success: boolean }> => {
+    const response = await instanceAxios.put<ChangePasswordResponse>(
+      `${ApiRoutes.changePassword}`,
+      data
+    )
+    const { Success: success } = response.data
+    return { success }
   },
 }

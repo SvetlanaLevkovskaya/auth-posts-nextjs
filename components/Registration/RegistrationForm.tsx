@@ -13,17 +13,11 @@ import { Button, Input, customToastError, customToastSuccess } from '@/ui/index'
 import { apiClientService } from '@/services/apiClientService'
 
 import { useClearErrorsOnOutsideClick } from '@/hooks'
+import { AppRoutes } from '@/lib/api/routes'
 import { login } from '@/stores/userStore'
+import { RegistrationFormData } from '@/types'
 import { registrationValidationSchema } from '@/utils'
 
-
-interface RegistrationFormData {
-  username: string
-  password: string
-  email: string
-  firstName: string
-  lastName: string
-}
 
 export const RegistrationForm = () => {
   const router = useRouter()
@@ -40,26 +34,18 @@ export const RegistrationForm = () => {
 
   useClearErrorsOnOutsideClick(formRef, clearErrors)
 
-  const onSubmit: SubmitHandler<RegistrationFormData> = async ({
-    username,
-    password,
-    email,
-    firstName,
-    lastName,
-  }) => {
+  const onSubmit: SubmitHandler<RegistrationFormData> = async (formData) => {
     try {
       await apiClientService.registration({
-        username,
-        password,
-        email,
-        first_name: firstName,
-        last_name: lastName,
+        ...formData,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
       })
 
-      login(username, password)
+      login(formData.username, formData.password)
 
-      customToastSuccess(`User ${username} registered successfully`)
-      router.push('/')
+      customToastSuccess(`User ${formData.username} registered successfully`)
+      router.push(AppRoutes.articles)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
@@ -114,7 +100,7 @@ export const RegistrationForm = () => {
 
         <p className="text-black mt-4">
           Already have an account?
-          <Link href="/login" className="link text-black ml-2">
+          <Link href={AppRoutes.login} className="link text-black ml-2">
             Login
           </Link>
         </p>

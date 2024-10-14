@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation'
 
 import { Button } from '@/ui/Button/Button'
 
+import { AppRoutes } from '@/lib/api/routes'
+
 
 interface ButtonNotFoundProps {}
 
@@ -18,7 +20,7 @@ export const ButtonNotFound: FC<ButtonNotFoundProps> = () => {
       size="l"
       className="w-full tb:w-[330px] mt-5"
       onClick={() => {
-        push('/')
+        push(AppRoutes.articles)
       }}
     >
       Go Home

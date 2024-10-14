@@ -12,6 +12,7 @@ import { Button, Input, customToastError, customToastSuccess } from '@/ui/index'
 import { apiClientService } from '@/services/apiClientService'
 
 import { useClearErrorsOnOutsideClick } from '@/hooks'
+import { AppRoutes } from '@/lib/api/routes'
 import { ChangePasswordFormData } from '@/types'
 import { changePasswordValidationSchema } from '@/utils'
 
@@ -37,14 +38,14 @@ export const ChangePasswordForm = () => {
         confirmed_password: data.confirmed_password,
       })
 
-      if (response.Success) {
+      if (response.success) {
         customToastSuccess('Password changed successfully')
-        window.location.href = '/login'
+        window.location.href = AppRoutes.login
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          customToastError(error.response.data?.old_password?.[0])
+          customToastError(error.response.data?.old_password?.[0] || error.response.data?.password?.[0])
         }
       }
     }
@@ -78,7 +79,7 @@ export const ChangePasswordForm = () => {
           </Button>
         </form>
         <p className="text-black mt-4">
-          <Link href="/login" className="link text-black ml-2">
+          <Link href={AppRoutes.login} className="link text-black ml-2">
             Go back
           </Link>
         </p>

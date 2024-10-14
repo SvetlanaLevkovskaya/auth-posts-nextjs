@@ -5,6 +5,7 @@ import { ReactNode, useEffect } from 'react'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/navigation'
 
+import { AppRoutes } from '@/lib/api/routes'
 import { userStore } from '@/stores/userStore'
 
 
@@ -18,7 +19,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     if (username) {
       userStore.set({ username, password })
     } else {
-      router.push('/login')
+      router.push(AppRoutes.login)
     }
   }, [router])
 

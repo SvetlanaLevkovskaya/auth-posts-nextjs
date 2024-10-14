@@ -6,9 +6,9 @@ export const changePasswordValidationSchema = yup.object().shape({
     .string()
     .required('New password is required.')
     .min(3, 'Password must be at least 3 characters long.')
-    .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
+    .matches(/^[a-zA-Z0-9]+$/, 'Password can only contain Latin letters and numbers.'),
   confirmed_password: yup
     .string()
-    .oneOf([yup.ref('password')], 'Passwords must match.')
+    .oneOf([yup.ref('password')], 'Password must be confirmed correctly.')
     .required('Confirm your new password.'),
 })

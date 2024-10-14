@@ -1,11 +1,29 @@
-export interface User {
-  id: number
-  username: string
-}
-
-export type FormData = {
+export interface RegistrationRequest {
   username: string
   password: string
+  email: string
+  first_name: string
+  last_name: string
+}
+
+interface User {
+  id: number
+  lastName: string
+  firstName: string
+  username: string
+  email: string
+}
+
+export interface RegistrationResponse {
+  user: User
+}
+
+export interface RegistrationFormData {
+  username: string
+  password: string
+  email: string
+  firstName: string
+  lastName: string
 }
 
 export type Params = {
@@ -14,32 +32,57 @@ export type Params = {
   }
 }
 
+export type LoginFormData = {
+  username: string
+  password: string
+}
+
+export interface LoginResponse {
+  refresh: string
+  access: string
+}
+
+export interface ChangePasswordFormData {
+  old_password: string
+  password: string
+  confirmed_password: string
+}
+
+export interface ChangePasswordResponse {
+  Success: boolean
+}
+
 export interface Author {
-  id: number;
-  username: string;
-  email: string;
+  id: number
+  username: string | null
+  email: string
 }
 
 export interface Article {
-  id: number;
-  author: Author;
-  title: string;
-  slug: string;
-  content: string;
-  created: string;
-  updated: string;
-  image: string;
+  id: number
+  author: Author
+  title: string
+  slug: string
+  content: string
+  created: string
+  updated: string
+  image: string
 }
 
+export type CreateAndUpdateArticleResponse = Pick<Article, 'title' | 'content' | 'image'>
+
+
 export interface Comment {
-  id: number;
-  author: Author;
-  content: string;
-  created: string;
-  updated: string;
-  parent: number | null;
-  children: Comment[];
+  id: number
+  author: Author
+  content: string
+  created: string
+  updated: string
+  parent: number | null
+  children: Comment[]
 }
+
+export type CreateAndUpdateCommentResponse = Pick<Comment, 'content' | 'parent'>
 
 export type CommentFormData = {
   content: string
@@ -51,12 +94,3 @@ export interface ArticleFormData {
   content: string
   image?: FileList | null
 }
-
-export interface ChangePasswordFormData {
-  old_password: string
-  password: string
-  confirmed_password: string
-}
-
-
-
