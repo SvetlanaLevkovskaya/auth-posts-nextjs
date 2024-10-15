@@ -15,7 +15,6 @@ import { hasLongWord } from '@/utils'
 
 type Props = {
   comments: Comment[]
-
 }
 
 export const ArticleDetails: FC<Props> = ({ comments }) => {
@@ -23,6 +22,7 @@ export const ArticleDetails: FC<Props> = ({ comments }) => {
   const { username } = useStore(userStore)
 
   if (!article) return null
+
   const shouldBreakAll = hasLongWord(article.content)
   const isAuthor = article.author.username === username
 

@@ -39,23 +39,24 @@ export const CreateArticleForm = () => {
       formData.append('image', data.image[0])
     }
     try {
-      const newArticleData = await apiClientService.createArticle(formData);
-      const allArticles = await apiClientService.getAllArticles();
+      const newArticleData = await apiClientService.createArticle(formData)
+      const allArticles = await apiClientService.getAllArticles()
 
       const createdArticle = allArticles.find(
-        (article) => article.title === newArticleData.title && article.content === newArticleData.content
-      );
+        (article) =>
+          article.title === newArticleData.title && article.content === newArticleData.content
+      )
 
       if (createdArticle) {
-        addArticle(createdArticle);
-        customToastSuccess('Статья успешно создана и загружена!');
+        addArticle(createdArticle)
+        customToastSuccess('Статья успешно создана и загружена!')
       } else {
-        customToastError('Не удалось найти созданную статью.');
+        customToastError('Не удалось найти созданную статью.')
       }
-      reset();
+      reset()
     } catch (error) {
-      console.error('Ошибка при создании статьи:', error);
-      customToastError('Ошибка при создании статьи.');
+      console.error('Ошибка при создании статьи:', error)
+      customToastError('Ошибка при создании статьи.')
     }
   }
 

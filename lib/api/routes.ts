@@ -1,5 +1,4 @@
 export const ApiRoutes = {
-  login: '/login',
   articles: '/articles/',
   article: '/articles/',
   token: '/token/',

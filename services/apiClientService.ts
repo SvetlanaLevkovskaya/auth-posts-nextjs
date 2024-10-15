@@ -21,8 +21,12 @@ export const apiClientService = {
     return response.data
   },
 
+  deleteArticle: async (articleId: number): Promise<void> => {
+    return await instanceAxios.delete(`${ApiRoutes.articles}${articleId}/`)
+  },
+
   getAllArticleById: async (id: string | number): Promise<Article> => {
-    const response = await instanceAxios.get<Article>(`${ApiRoutes.article}${id}`)
+    const response = await instanceAxios.get<Article>(`${ApiRoutes.article}${id}/`)
     return response.data
   },
 
@@ -80,7 +84,6 @@ export const apiClientService = {
 
   login: async (data: LoginFormData): Promise<LoginResponse> => {
     const response = await instanceAxios.post<LoginResponse>(`${ApiRoutes.token}`, data)
-    console.log('response.data', response.data)
     return response.data
   },
 

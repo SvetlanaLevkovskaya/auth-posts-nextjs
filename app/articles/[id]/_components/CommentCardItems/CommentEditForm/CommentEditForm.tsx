@@ -1,9 +1,8 @@
-import { FC, KeyboardEvent, useRef } from 'react'
+import { FC, KeyboardEvent } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Button, TextArea } from '@/ui/index'
 
-import { useClearErrorsOnOutsideClick } from '@/hooks'
 import { CommentFormData } from '@/types'
 
 
@@ -14,17 +13,13 @@ type Props = {
 }
 
 export const CommentEditForm: FC<Props> = ({ initialContent, onSubmit, onCancel }) => {
-  const formRef = useRef<HTMLFormElement | null>(null)
   const {
     register,
     handleSubmit,
-    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<CommentFormData>({
     defaultValues: { content: initialContent },
   })
-
-  useClearErrorsOnOutsideClick(formRef, clearErrors)
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -34,7 +29,7 @@ export const CommentEditForm: FC<Props> = ({ initialContent, onSubmit, onCancel 
   }
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <TextArea
         register={register('content')}
         onKeyDown={handleKeyDown}

@@ -45,7 +45,9 @@ export const ChangePasswordForm = () => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          customToastError(error.response.data?.old_password?.[0] || error.response.data?.password?.[0])
+          customToastError(
+            error.response.data?.old_password?.[0] || error.response.data?.password?.[0]
+          )
         }
       }
     }
