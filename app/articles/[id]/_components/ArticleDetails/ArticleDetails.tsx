@@ -1,7 +1,5 @@
 'use client'
 
-import { FC } from 'react'
-
 import { useStore } from '@nanostores/react'
 
 import { ImageWithFallback } from '@/components/ui'
@@ -9,16 +7,12 @@ import { ImageWithFallback } from '@/components/ui'
 import { Comments, EditArticleForm } from '@/app/articles/[id]/_components'
 import { useArticle } from '@/providers/ArticleProvider'
 import { userStore } from '@/stores/userStore'
-import { Comment } from '@/types'
 import { hasLongWord } from '@/utils'
 
 
-type Props = {
-  comments: Comment[]
-}
-
-export const ArticleDetails: FC<Props> = ({ comments }) => {
+export const ArticleDetails = () => {
   const { article } = useArticle()
+
   const { username } = useStore(userStore)
 
   if (!article) return null
@@ -41,7 +35,7 @@ export const ArticleDetails: FC<Props> = ({ comments }) => {
         </div>
 
         <div className="container mx-auto p-4 mt-8 bg-gray-1 rounded-lg shadow-md">
-          <Comments initialComments={comments} articleId={article.id} />
+          <Comments articleId={article.id} />
         </div>
       </div>
 

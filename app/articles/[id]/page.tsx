@@ -6,6 +6,7 @@ import { apiClientService } from '@/services/apiClientService'
 
 import { ArticleDetails } from '@/app/articles/[id]/_components'
 import { ArticleProvider } from '@/providers/ArticleProvider'
+import { CommentsProvider } from '@/providers/CommentsProvider'
 import { Params } from '@/types'
 
 
@@ -22,7 +23,9 @@ export default async function ArticlePage({ params }: Params) {
   return (
     <NavLayout>
       <ArticleProvider initialArticle={article}>
-        <ArticleDetails comments={comments} />
+        <CommentsProvider initialComments={comments}>
+          <ArticleDetails />
+        </CommentsProvider>
       </ArticleProvider>
     </NavLayout>
   )

@@ -82,6 +82,10 @@ export const apiClientService = {
     return response.data
   },
 
+  deleteCommentById: async (articleId: string | number, commentId: number): Promise<void> => {
+    await instanceAxios.delete(`${ApiRoutes.articles}${articleId}/comments/${commentId}/`)
+  },
+
   login: async (data: LoginFormData): Promise<LoginResponse> => {
     const response = await instanceAxios.post<LoginResponse>(`${ApiRoutes.token}`, data)
     return response.data

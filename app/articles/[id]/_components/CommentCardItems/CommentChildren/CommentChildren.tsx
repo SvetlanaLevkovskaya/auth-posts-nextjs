@@ -1,3 +1,5 @@
+'use client'
+
 import { FC } from 'react'
 
 import { CommentCard } from '@/app/articles/[id]/_components'
@@ -11,12 +13,14 @@ type Props = {
 
 export const CommentChildren: FC<Props> = ({ childrenComments, articleId }) => (
   <ul>
-    {childrenComments.map((childComment, index) => (
-      <CommentCard
-        key={`${childComment.id}-${index}`}
-        comment={childComment}
-        articleId={articleId}
-      />
-    ))}
+    {childrenComments.map((childComment, index) => {
+      return (
+        <CommentCard
+          key={`${childComment.id}-${index}`}
+          comment={childComment}
+          articleId={articleId}
+        />
+      )
+    })}
   </ul>
 )

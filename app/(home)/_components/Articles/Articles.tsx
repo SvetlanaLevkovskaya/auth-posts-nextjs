@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+
 import { useStore } from '@nanostores/react'
 import Link from 'next/link'
 
@@ -13,10 +15,12 @@ import { userStore } from '@/stores/userStore'
 
 
 export const Articles = () => {
+  const [isDeletingLoading, setIsDeletingLoading] = useState<boolean>(false)
   const { articles, setArticles } = useArticles()
   const { username } = useStore(userStore)
 
   const handleDelete = async (articleId: number) => {
+    setIsDeletingLoading(true)
     try {
       await apiClientService.deleteArticle(articleId)
       const updatedArticles = await apiClientService.getAllArticles()
@@ -25,6 +29,8 @@ export const Articles = () => {
     } catch (error) {
       customToastError('Ошибка при удалении статьи')
       console.error('Ошибка при удалении статьи:', error)
+    } finally {
+      setIsDeletingLoading(false)
     }
   }
 
@@ -78,14 +84,19 @@ export const Articles = () => {
 
                   {isAuthor && (
                     <div className="mt-4 flex justify-end">
-                      <Button color="purple" size="m" onClick={ () => handleDelete(article.id) }>
+                      <Button
+                        color="purple"
+                        size="m"
+                        disabled={isDeletingLoading}
+                        onClick={() => handleDelete(article.id)}
+                      >
                         Delete
                       </Button>
                     </div>
-                  ) }
+                  )}
                 </div>
               )
-            }) }
+            })}
         </div>
 
         <CreateArticleForm />

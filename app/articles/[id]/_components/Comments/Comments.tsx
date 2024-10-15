@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, KeyboardEvent, useRef, useState } from 'react'
+import { FC, KeyboardEvent, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
 import axios from 'axios'
@@ -14,16 +14,16 @@ import { apiClientService } from '@/services/apiClientService'
 
 import { CommentCard } from '@/app/articles/[id]/_components'
 import { useClearErrorsOnOutsideClick } from '@/hooks'
-import { Comment, CommentFormData } from '@/types'
+import { useComments } from '@/providers/CommentsProvider'
+import { CommentFormData } from '@/types'
 
 
 type Props = {
   articleId: number
-  initialComments: Comment[]
 }
 
-export const Comments: FC<Props> = ({ articleId, initialComments }) => {
-  const [comments, setComments] = useState<Comment[]>(initialComments)
+export const Comments: FC<Props> = ({ articleId }) => {
+  const { comments, setComments } = useComments()
   const formRef = useRef<HTMLFormElement | null>(null)
 
   const {
@@ -40,7 +40,7 @@ export const Comments: FC<Props> = ({ articleId, initialComments }) => {
 
   const handleAddComment = async (data: CommentFormData) => {
     try {
-     await apiClientService.addCommentToArticle(articleId, {
+      await apiClientService.addCommentToArticle(articleId, {
         content: data.content,
         parent: data.parent || null,
       })
@@ -68,7 +68,11 @@ export const Comments: FC<Props> = ({ articleId, initialComments }) => {
     <div className="mt-8">
       <h2 className="text-s_text font-bold mb-4">Comments ({comments?.length})</h2>
 
-      <form  ref={formRef} onSubmit={handleSubmit(handleAddComment)} className="flex items-start gap-4 mb-4">
+      <form
+        ref={formRef}
+        onSubmit={handleSubmit(handleAddComment)}
+        className="flex items-start gap-4 mb-4"
+      >
         <Input
           register={register('content', { required: 'Field is required.' })}
           placeholder="Write your comment..."
@@ -84,8 +88,8 @@ export const Comments: FC<Props> = ({ articleId, initialComments }) => {
       <hr className="bg-gray-3 my-4" />
 
       <ul className="space-y-4">
-        {comments.map((comment, index) => (
-          <CommentCard key={`${comment.id}-${index}`} comment={comment} articleId={articleId} />
+        {comments.map((comment) => (
+          <CommentCard key={comment.id} comment={comment} articleId={articleId} />
         ))}
       </ul>
     </div>

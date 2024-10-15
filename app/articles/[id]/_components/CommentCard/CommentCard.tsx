@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 import { useStore } from '@nanostores/react'
 import axios from 'axios'
@@ -14,6 +14,7 @@ import {
   CommentEditForm,
   CommentReplyForm,
 } from '@/app/articles/[id]/_components/CommentCardItems'
+import { useComments } from '@/providers/CommentsProvider'
 import { userStore } from '@/stores/userStore'
 import { Comment, CommentFormData } from '@/types'
 
@@ -27,7 +28,16 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
   const [currentComment, setCurrentComment] = useState<Comment>(comment)
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [isReplying, setIsReplying] = useState<boolean>(false)
+  const [isReplyingLoading, setIsReplyingLoading] = useState<boolean>(false)
+  const [isDeletingLoading, setIsDeletingLoading] = useState<boolean>(false)
   const { username } = useStore(userStore)
+  const { setComments } = useComments()
+
+  const isAuthor = comment.author.username === username
+
+  useEffect(() => {
+    setCurrentComment(comment)
+  }, [comment])
 
   const handleContentUpdated = async (data: CommentFormData) => {
     try {
@@ -100,6 +110,7 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
   }
 
   const handleReply = async (data: CommentFormData) => {
+    setIsReplyingLoading(true)
     try {
       await apiClientService.addCommentToArticle(articleId, {
         content: data.content,
@@ -134,11 +145,28 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
 
       setIsReplying(false)
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          customToastError(error.response.data?.detail || error.response.data.content[0])
-        }
+      if (axios.isAxiosError(error) && error.response) {
+        customToastError(error.response.data?.detail || error.response.data.content[0])
       }
+    } finally {
+      setIsReplyingLoading(false)
+    }
+  }
+
+  const onDelete = async () => {
+    setIsDeletingLoading(true)
+    try {
+      await apiClientService.deleteCommentById(articleId, currentComment.id)
+      const updatedComments = await apiClientService.getCommentsByArticleId(articleId)
+
+      setComments(updatedComments)
+      customToastSuccess('Комментарий успешно удален')
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        customToastError(error.response.data?.detail || error.response.data.content[0])
+      }
+    } finally {
+      setIsDeletingLoading(false)
     }
   }
 
@@ -153,22 +181,36 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
       ) : (
         <>
           <p className="mt-2 text-gray-3 break-words" onClick={() => setIsEditing(true)}>
-            {currentComment.content}
+            {currentComment?.content}
           </p>
           <small className="text-gray-4 block mt-2">
             {currentComment?.author?.username || username}
           </small>
-          <Button
-            color="grey"
-            size="s"
-            onClick={(e) => {
-              e.stopPropagation()
-              setIsReplying(!isReplying)
-            }}
-            className="mt-2 mb-2"
-          >
-            Reply
-          </Button>
+          <div className="flex gap-1.5">
+            <Button
+              color="grey"
+              size="s"
+              disabled={isReplyingLoading}
+              onClick={(e) => {
+                e.stopPropagation()
+                setIsReplying(!isReplying)
+              }}
+              className="mt-2 mb-2"
+            >
+              Reply
+            </Button>
+            {isAuthor && (
+              <Button
+                color="grey"
+                size="s"
+                disabled={isDeletingLoading}
+                onClick={onDelete}
+                className="mt-2 mb-2"
+              >
+                Delete
+              </Button>
+            )}
+          </div>
         </>
       )}
 
@@ -177,7 +219,11 @@ export const CommentCard: FC<Props> = ({ comment, articleId }) => {
       )}
 
       {currentComment?.children?.length > 0 && (
-        <CommentChildren childrenComments={currentComment.children} articleId={articleId} />
+        <CommentChildren
+          key={currentComment.id}
+          childrenComments={currentComment.children}
+          articleId={articleId}
+        />
       )}
     </li>
   )

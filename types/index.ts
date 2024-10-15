@@ -53,7 +53,7 @@ export interface ChangePasswordResponse {
 }
 
 export interface Author {
-  id: number
+  id: number | null
   username: string | null
   email: string
 }

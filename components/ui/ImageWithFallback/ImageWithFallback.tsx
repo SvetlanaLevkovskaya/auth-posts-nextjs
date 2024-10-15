@@ -42,6 +42,7 @@ export const ImageWithFallback: FC<Props> = ({ src, alt, width, height, classNam
           unoptimized
           onLoad={onLoad}
           onError={onError}
+          priority
         />
       )}
     </div>
