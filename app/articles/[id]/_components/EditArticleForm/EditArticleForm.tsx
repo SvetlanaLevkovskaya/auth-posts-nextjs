@@ -1,10 +1,11 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 import axios from 'axios'
+import Image from 'next/image'
 
 import {
   Button,
@@ -25,6 +26,7 @@ import { editArticleValidationSchema } from '@/utils'
 
 export const EditArticleForm = () => {
   const [isHydrated, setIsHydrated] = useState(false)
+  const [previewImage, setPreviewImage] = useState<string | null>(null)
   const { article, setArticle } = useArticle()
   const formRef = useRef<HTMLFormElement | null>(null)
   const {
@@ -32,6 +34,7 @@ export const EditArticleForm = () => {
     handleSubmit,
     setValue,
     clearErrors,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<ArticleFormData>({
     resolver: yupResolver(editArticleValidationSchema),
@@ -45,6 +48,9 @@ export const EditArticleForm = () => {
     if (isHydrated && article) {
       setValue('title', article.title)
       setValue('content', article.content)
+      if (article.image) {
+        setPreviewImage(article.image)
+      }
     }
   }, [article, setValue, isHydrated])
 
@@ -61,9 +67,9 @@ export const EditArticleForm = () => {
       if (data.image && data.image.length > 0) {
         formData.append('image', data.image[0])
       }
+
       await apiClientService.updateArticle(article.id, formData)
       const updatedArticle = await apiClientService.getAllArticleById(article.id)
-      console.log('updatedArticle', updatedArticle)
       setArticle(updatedArticle)
       customToastSuccess(`Статья успешно обновлена!`)
     } catch (error) {
@@ -98,15 +104,39 @@ export const EditArticleForm = () => {
             error={errors.content?.message}
           />
 
-          <Input
-            type="file"
-            label={'Image (optional):'}
-            register={register('image')}
-            placeholder="Image"
-            error={errors.image?.message}
-            disabled={isSubmitting}
-            accept="image/*"
-          />
+          <div className="flex justify-center gap-2">
+            <Controller
+              name="image"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  register={register('image')}
+                  type="file"
+                  label={'Image (optional):'}
+                  placeholder="Image"
+                  error={errors.image?.message}
+                  accept="image/*"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0]
+                    if (file) {
+                      field.onChange(file)
+                      setPreviewImage(URL.createObjectURL(file))
+                    }
+                  }}
+                />
+              )}
+            />
+
+            {previewImage && (
+              <Image
+                src={previewImage}
+                alt="image preview"
+                width={96}
+                height={96}
+                className="max-w-24 max-h-24 object-cover rounded-md self-end"
+              />
+            )}
+          </div>
 
           <Button color="neon" className="w-full" disabled={isSubmitting}>
             {isSubmitting ? <Spinner /> : 'Update article'}

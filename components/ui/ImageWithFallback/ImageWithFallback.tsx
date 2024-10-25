@@ -1,54 +1,45 @@
 'use client'
 
-import { useState } from 'react'
+import { ReactElement, SyntheticEvent, useEffect, useState } from 'react'
 
-import Image from 'next/image'
+import Image, { ImageProps } from 'next/image'
+
+import notAvailable from '@/public/no-image.png'
 
 
-const FallbackImage = () => (
-  <div className="bg-gray-3 flex items-center justify-center rounded-lg w-48 h-48 mr-4">
-    <span className="text-gray-300">No Image</span>
-  </div>
-)
+interface Props extends Omit<ImageProps, 'src'> {
+  fallback?: string
+  src?: ImageProps['src']
+}
 
-export const ImageWithFallback = ({
-  src,
-  alt,
-  width,
-  height,
-  className,
-}: {
-  src: string | null
-  alt: string
-  width: number
-  height: number
-  className?: string
-}) => {
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [hasError, setHasError] = useState(false)
+export const ImageWithFallback = (props: Props): ReactElement => {
+  const { fallback = notAvailable, src, alt, ...rest } = props
+  const [{ url }, setImageState] = useState({
+    url: src ?? fallback,
+    isLoaded: false,
+    hasError: false,
+  })
 
-  const onLoad = () => setIsLoaded(true)
-  const onError = () => setHasError(true)
+  useEffect(() => {
+    setImageState({
+      url: src ?? fallback,
+      isLoaded: false,
+      hasError: false,
+    })
+  }, [src, fallback])
 
-  const shouldShowFallback = !src || hasError || !isLoaded
+  const handleLoad = () => {
+    setImageState((prev) => ({ ...prev, isLoaded: true }))
+  }
 
-  return (
-    <div className="relative mb-4 mr-4 min-w-48 min-h-48">
-      {shouldShowFallback && <FallbackImage />}
+  const handleError = ({ currentTarget }:SyntheticEvent<HTMLImageElement>) => {
+    currentTarget.onerror = null
+    setImageState({
+      url: notAvailable?.src,
+      isLoaded: false,
+      hasError: true,
+    })
+  }
 
-      {src && !hasError && (
-        <Image
-          src={src}
-          alt={alt}
-          width={width}
-          height={height}
-          className={`absolute inset-0 w-48 h-48 rounded-lg object-cover ${className}`}
-          unoptimized
-          onLoad={onLoad}
-          onError={onError}
-          priority
-        />
-      )}
-    </div>
-  )
+  return <Image alt={alt} onLoad={handleLoad} onError={handleError} src={url} {...rest} />
 }

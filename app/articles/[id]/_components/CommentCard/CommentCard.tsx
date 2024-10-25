@@ -153,7 +153,6 @@ export const CommentCard = ({ comment, articleId }: { comment: Comment; articleI
     try {
       await apiClientService.deleteCommentById(articleId, currentComment.id)
       const updatedComments = await apiClientService.getCommentsByArticleId(articleId)
-
       setComments(updatedComments)
       customToastSuccess('Комментарий успешно удален')
     } catch (error) {

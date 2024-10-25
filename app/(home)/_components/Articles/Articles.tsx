@@ -11,7 +11,7 @@ import { userStore } from '@/stores/userStore'
 
 
 export const Articles = () => {
-  const { articles, deleteArticle, deletingArticleId} = useArticles()
+  const { articles, deleteArticle, deletingArticleId } = useArticles()
   const { username } = useStore(userStore)
 
   if (!articles.length) return null
@@ -44,7 +44,9 @@ export const Articles = () => {
                       alt={article.title}
                       width={192}
                       height={192}
+                      className="object-cover rounded-md mr-4 w-48 h-48"
                     />
+
                     <div className="flex flex-col justify-between flex-grow">
                       <div className="flex flex-col justify-between">
                         <h2 className="break-words whitespace-normal">
