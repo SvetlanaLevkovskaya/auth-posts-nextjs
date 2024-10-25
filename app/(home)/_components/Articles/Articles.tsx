@@ -1,13 +1,9 @@
 'use client'
 
-import { useState } from 'react'
-
 import { useStore } from '@nanostores/react'
 import Link from 'next/link'
 
-import { Button, ImageWithFallback, customToastError, customToastSuccess } from '@/components/ui'
-
-import { apiClientService } from '@/services/apiClientService'
+import { Button, ImageWithFallback } from '@/components/ui'
 
 import { CreateArticleForm } from '@/app/(home)/_components'
 import { useArticles } from '@/providers/ArticlesProvider'
@@ -15,24 +11,8 @@ import { userStore } from '@/stores/userStore'
 
 
 export const Articles = () => {
-  const [isDeletingLoading, setIsDeletingLoading] = useState<boolean>(false)
-  const { articles, setArticles } = useArticles()
+  const { articles, deleteArticle, deletingArticleId} = useArticles()
   const { username } = useStore(userStore)
-
-  const handleDelete = async (articleId: number) => {
-    setIsDeletingLoading(true)
-    try {
-      await apiClientService.deleteArticle(articleId)
-      const updatedArticles = await apiClientService.getAllArticles()
-      setArticles(updatedArticles)
-      customToastSuccess('Статья успешно удалена!')
-    } catch (error) {
-      customToastError('Ошибка при удалении статьи')
-      console.error('Ошибка при удалении статьи:', error)
-    } finally {
-      setIsDeletingLoading(false)
-    }
-  }
 
   if (!articles.length) return null
   return (
@@ -42,7 +22,7 @@ export const Articles = () => {
         <div className="flex flex-col justify-center w-full gap-6 px-0 tb:px-10">
           {articles &&
             articles.map((article, index) => {
-              const isAuthor = article.author.username === username
+              const isAuthor = article?.author?.username === username
               const isContentLong = article?.content?.length > 100
               const displayedContent = isContentLong
                 ? article.content.slice(0, 100) + '...'
@@ -87,8 +67,8 @@ export const Articles = () => {
                       <Button
                         color="purple"
                         size="m"
-                        disabled={isDeletingLoading}
-                        onClick={() => handleDelete(article.id)}
+                        disabled={deletingArticleId === article.id}
+                        onClick={() => deleteArticle(article.id)}
                       >
                         Delete
                       </Button>

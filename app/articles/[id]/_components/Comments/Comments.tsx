@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, KeyboardEvent, useRef } from 'react'
+import { KeyboardEvent, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
 import axios from 'axios'
@@ -18,11 +18,7 @@ import { useComments } from '@/providers/CommentsProvider'
 import { CommentFormData } from '@/types'
 
 
-type Props = {
-  articleId: number
-}
-
-export const Comments: FC<Props> = ({ articleId }) => {
+export const Comments = ({ articleId }: { articleId: number }) => {
   const { comments, setComments } = useComments()
   const formRef = useRef<HTMLFormElement | null>(null)
 

@@ -1,52 +1,41 @@
-.input {
+.wrapper {
   @apply transition-all2;
 
-  & label {
-    @apply relative flex flex-col gap-[0.875rem] text-s_text;
+  & .input {
+    @apply w-full border border-transparent
+    bg-gray-3 text-white text-s_text py-4 px-5 rounded-lg placeholder-gray-4;
 
-    & .wrapper {
-      @apply relative rounded-lg;
-
-      & input {
-        @apply w-full border border-transparent transition-colors
-        bg-gray-3 text-white text-s_text py-4 px-5 rounded-lg placeholder-gray-4;
-
-        &:focus {
-          outline: none;
-        }
-
-        &:-webkit-autofill {
-          -webkit-text-fill-color: white !important;
-          transition: background-color 5000s ease-in-out 0s;
-        }
-
-        &:-webkit-autofill:hover,
-        &:-webkit-autofill:focus,
-        &:-webkit-autofill:active {
-          -webkit-text-fill-color: white !important;
-          transition: background-color 5000s ease-in-out 0s;
-        }
-
-        &::-webkit-file-upload-button {
-          @apply text-gray-4 bg-gray-3 border-none rounded-md pr-2 px-4 pl-0 mr-2 ;
-          cursor: pointer;
-          transition: background-color 0.3s ease;
-
-          &:focus {
-            outline: none;
-          }
-        }
-      }
+    &:-webkit-autofill {
+      -webkit-text-fill-color: white !important;
+      transition: background-color 5000s ease-in-out 0s;
     }
 
-    & .error {
-      @apply text-red animate-scaleIn absolute bottom-[-25px];
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus,
+    &:-webkit-autofill:active {
+      -webkit-text-fill-color: white !important;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+
+    &::-webkit-file-upload-button {
+      @apply text-gray-4 bg-gray-3 border-none rounded-md pr-2 px-4 pl-0 mr-2 ;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
     }
   }
 
-  &.error {
-    & .wrapper input {
-      outline: solid theme('colors.red') 1px;
-    }
+  & .error {
+    @apply animate-scaleIn text-red absolute mt-2 text-s_text;
+  }
+
+  label {
+    @apply flex flex-col gap-4 text-s_text;
+  }
+}
+
+.errorWrapper {
+  & input {
+    outline: solid theme('colors.red') 1px;
   }
 }

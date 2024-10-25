@@ -1,4 +1,4 @@
-import { FC, KeyboardEvent } from 'react'
+import { KeyboardEvent } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Button, TextArea } from '@/ui/index'
@@ -6,13 +6,9 @@ import { Button, TextArea } from '@/ui/index'
 import { CommentFormData } from '@/types'
 
 
-type Props = {
-  initialContent: string
+export const CommentEditForm = ({ initialContent, onSubmit, onCancel } : {  initialContent: string
   onSubmit: (data: CommentFormData) => void
-  onCancel: () => void
-}
-
-export const CommentEditForm: FC<Props> = ({ initialContent, onSubmit, onCancel }) => {
+  onCancel: () => void}) => {
   const {
     register,
     handleSubmit,

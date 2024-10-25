@@ -31,17 +31,17 @@ export const Input: FC<InputProps> = ({
   return (
     <div
       className={clsx(
-        styles.input,
-        { [styles.error]: typeof error !== 'undefined' },
+        styles.wrapper,
+        { [styles.errorWrapper]: error },
         { ['mb-9']: typeof error === 'string' && !!error.length },
         { [`${className}`]: className }
       )}
     >
       <label>
         {label && <span className={styles.label}>{label}</span>}
-
-        <div className={styles.wrapper}>
+        <div>
           <input
+            className={styles.input}
             type={currentType}
             placeholder={placeholder}
             required={required}
@@ -59,8 +59,10 @@ export const Input: FC<InputProps> = ({
             }}
             {...props}
           />
+          {typeof error === 'string' && !!error.length && (
+            <div className={styles.error}>{error}</div>
+          )}
         </div>
-        {typeof error === 'string' && !!error.length && <div className={styles.error}>{error}</div>}
       </label>
     </div>
   )

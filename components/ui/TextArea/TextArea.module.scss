@@ -1,25 +1,17 @@
 .wrapper {
   @apply transition-all2;
 
-  & .label {
-    @apply cursor-pointer text-white gap-4 text-s_text;
-  }
-
   & .textarea {
-    @apply w-full border border-transparent
-    bg-gray-3 placeholder-gray-4 text-white
-    text-s_caption tb:text-s_text
-    rounded-lg
-    py-4 tb:py-5 px-7 tb:px-6
-    resize-none;
+    @apply w-full border border-transparent bg-gray-3 placeholder-gray-4 text-white text-s_caption tb:text-s_text
+    rounded-lg py-4 tb:py-5 px-7 tb:px-6
   }
 
   & .error {
     @apply animate-scaleIn text-red absolute mt-2 text-s_text;
   }
 
-  & label {
-    @apply flex flex-col gap-4 text-s_body;
+  label {
+    @apply flex flex-col gap-4 text-s_text;
   }
 }
 

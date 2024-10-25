@@ -5,7 +5,14 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import { Button, Input, Spinner, customToastError, customToastSuccess } from '@/components/ui'
+import {
+  Button,
+  Input,
+  Spinner,
+  TextArea,
+  customToastError,
+  customToastSuccess,
+} from '@/components/ui'
 
 import { apiClientService } from '@/services/apiClientService'
 
@@ -68,15 +75,13 @@ export const CreateArticleForm = () => {
           register={register('title')}
           placeholder="Title"
           error={errors.title?.message}
-          disabled={isSubmitting}
         />
 
-        <Input
+        <TextArea
           label={'Content:'}
           register={register('content')}
           placeholder="Content"
           error={errors.content?.message}
-          disabled={isSubmitting}
         />
 
         <Input
@@ -84,7 +89,6 @@ export const CreateArticleForm = () => {
           label={'Image (optional):'}
           register={register('image')}
           error={errors.image?.message}
-          disabled={isSubmitting}
           accept="image/*"
         />
 

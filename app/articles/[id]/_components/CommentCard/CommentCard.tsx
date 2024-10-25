@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useStore } from '@nanostores/react'
 import axios from 'axios'
@@ -19,12 +19,7 @@ import { userStore } from '@/stores/userStore'
 import { Comment, CommentFormData } from '@/types'
 
 
-type Props = {
-  comment: Comment
-  articleId: number
-}
-
-export const CommentCard: FC<Props> = ({ comment, articleId }) => {
+export const CommentCard = ({ comment, articleId }: { comment: Comment; articleId: number }) => {
   const [currentComment, setCurrentComment] = useState<Comment>(comment)
   const [isEditing, setIsEditing] = useState<boolean>(false)
   const [isReplying, setIsReplying] = useState<boolean>(false)

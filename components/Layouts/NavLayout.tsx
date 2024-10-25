@@ -1,17 +1,19 @@
 'use client'
 
-import { FC, type PropsWithChildren } from 'react'
+import { ReactNode } from 'react'
 
 import clsx from 'clsx'
 
-import { Header } from './components/Header/Header'
+import { Header } from './ui/Header'
 
 
-interface NavLayoutProps extends PropsWithChildren {
+export const NavLayout = ({
+  disabledPadding,
+  children,
+}: {
   disabledPadding?: boolean
-}
-
-export const NavLayout: FC<NavLayoutProps> = ({ disabledPadding, children }) => {
+  children: ReactNode
+}) => {
   return (
     <div className="flex flex-col min-h-dvh">
       <Header />

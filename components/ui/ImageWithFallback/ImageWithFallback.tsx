@@ -1,25 +1,29 @@
 'use client'
 
-import { FC, useState } from 'react'
+import { useState } from 'react'
 
 import Image from 'next/image'
 
 
-const FallbackImage: FC = () => (
+const FallbackImage = () => (
   <div className="bg-gray-3 flex items-center justify-center rounded-lg w-48 h-48 mr-4">
     <span className="text-gray-300">No Image</span>
   </div>
 )
 
-type Props = {
+export const ImageWithFallback = ({
+  src,
+  alt,
+  width,
+  height,
+  className,
+}: {
   src: string | null
   alt: string
   width: number
   height: number
   className?: string
-}
-
-export const ImageWithFallback: FC<Props> = ({ src, alt, width, height, className }) => {
+}) => {
   const [isLoaded, setIsLoaded] = useState(false)
   const [hasError, setHasError] = useState(false)
 
