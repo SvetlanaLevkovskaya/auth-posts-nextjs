@@ -12,7 +12,6 @@ import { hasLongWord } from '@/utils'
 
 export const ArticleDetails = () => {
   const { article } = useArticle()
-
   const { username } = useStore(userStore)
 
   if (!article) return null

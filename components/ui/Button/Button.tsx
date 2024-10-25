@@ -16,8 +16,8 @@ interface ButtonProps extends PropsWithChildren {
   color?: ColorType
   size?: SizeType
   type?: 'square' | 'circle'
-  hoverColor?: 'purple' | 'neon'
-  active?: 'purple' | 'neon'
+  hoverColor?: 'purple' | 'neon' | 'grey'
+  active?: 'purple' | 'neon' | 'grey'
   disabled?: boolean
   className?: string
 }

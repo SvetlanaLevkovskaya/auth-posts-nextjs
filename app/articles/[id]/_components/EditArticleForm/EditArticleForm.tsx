@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useController, useForm } from 'react-hook-form'
 
+import { XMarkIcon } from '@heroicons/react/16/solid'
 import { yupResolver } from '@hookform/resolvers/yup'
 import axios from 'axios'
 import Image from 'next/image'
@@ -25,7 +26,6 @@ import { editArticleValidationSchema } from '@/utils'
 
 
 export const EditArticleForm = () => {
-  const [isHydrated, setIsHydrated] = useState(false)
   const [previewImage, setPreviewImage] = useState<string | null>(null)
   const { article, setArticle } = useArticle()
   const formRef = useRef<HTMLFormElement | null>(null)
@@ -40,19 +40,17 @@ export const EditArticleForm = () => {
     resolver: yupResolver(editArticleValidationSchema),
   })
 
-  useEffect(() => {
-    setIsHydrated(true)
-  }, [])
+  const { field } = useController({ control, name: 'image' })
 
   useEffect(() => {
-    if (isHydrated && article) {
+    if (article) {
       setValue('title', article.title)
       setValue('content', article.content)
       if (article.image) {
         setPreviewImage(article.image)
       }
     }
-  }, [article, setValue, isHydrated])
+  }, [article, setValue])
 
   useClearErrorsOnOutsideClick(formRef, clearErrors)
 
@@ -66,8 +64,9 @@ export const EditArticleForm = () => {
 
       if (data.image && data.image.length > 0) {
         formData.append('image', data.image[0])
+      } else if (!previewImage) {
+        formData.append('image', '')
       }
-
       await apiClientService.updateArticle(article.id, formData)
       const updatedArticle = await apiClientService.getAllArticleById(article.id)
       setArticle(updatedArticle)
@@ -81,8 +80,9 @@ export const EditArticleForm = () => {
     }
   }
 
-  if (!isHydrated) {
-    return null
+  const handleDeleteImage = () => {
+    setPreviewImage(null)
+    field.onChange(null)
   }
 
   return (
@@ -105,36 +105,39 @@ export const EditArticleForm = () => {
           />
 
           <div className="flex justify-center gap-2">
-            <Controller
-              name="image"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  register={register('image')}
-                  type="file"
-                  label={'Image (optional):'}
-                  placeholder="Image"
-                  error={errors.image?.message}
-                  accept="image/*"
-                  onChange={(event) => {
-                    const file = event.target.files?.[0]
-                    if (file) {
-                      field.onChange(file)
-                      setPreviewImage(URL.createObjectURL(file))
-                    }
-                  }}
-                />
-              )}
+            <Input
+              register={register('image')}
+              type="file"
+              label={'Image (optional):'}
+              placeholder="Image"
+              error={errors.image?.message}
+              accept="image/*"
+              onChange={(event) => {
+                const file = event.target.files?.[0]
+                if (file) {
+                  field.onChange(file)
+                  setPreviewImage(URL.createObjectURL(file))
+                }
+              }}
             />
-
             {previewImage && (
-              <Image
-                src={previewImage}
-                alt="image preview"
-                width={96}
-                height={96}
-                className="max-w-24 max-h-24 object-cover rounded-md self-end"
-              />
+              <div className="relative">
+                <Image
+                  src={previewImage}
+                  alt="image preview"
+                  width={96}
+                  height={96}
+                  className="max-w-24 max-h-24 object-cover rounded-md self-end"
+                />
+                <Button
+                  onClick={handleDeleteImage}
+                  color="white"
+                  size="xs"
+                  className="absolute top-0 right-0 p-1"
+                >
+                  <XMarkIcon className="h-5 w-5 text-gray-2" />
+                </Button>
+              </div>
             )}
           </div>
 

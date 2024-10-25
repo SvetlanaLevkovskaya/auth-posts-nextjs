@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.1.5",
     "@hookform/resolvers": "^3.6.0",
     "@nanostores/react": "^0.7.2",
     "@tanstack/react-query": "^5.51.23",
