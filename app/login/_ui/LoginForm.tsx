@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { KeyboardEvent, useRef } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -53,12 +53,20 @@ export const LoginForm = () => {
     }
   }
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSubmit(onSubmit)()
+    }
+  }
+
   return (
     <div className="flex-center-center min-h-screen">
       <div className="w-full max-w-md p-8 bg-white shadow-md rounded-md">
         <form
           ref={formRef}
           onSubmit={handleSubmit(onSubmit)}
+          onKeyDown={handleKeyDown}
           className="flex flex-col gap-5"
           autoComplete="off"
           noValidate

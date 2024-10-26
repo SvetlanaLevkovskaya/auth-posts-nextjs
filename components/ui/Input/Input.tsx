@@ -1,31 +1,44 @@
 'use client'
 
-import { type FC, useState } from 'react'
+import { ChangeEventHandler, useState } from 'react'
+import { UseFormRegisterReturn } from 'react-hook-form'
 
 import clsx from 'clsx'
 
 import styles from './Input.module.scss'
 
-import { InputProps } from './Input.types'
 
+type InputTypeNamespace = 'text' | 'password' | 'file' | 'email'
 
-export const Input: FC<InputProps> = ({
+type Props = {
+  register: UseFormRegisterReturn<any>
+  label?: string
+  placeholder?: string
+  type?: InputTypeNamespace
+  error?: string | boolean
+  onChange?: ChangeEventHandler<HTMLInputElement>
+  required?: boolean
+  disabled?: boolean
+  className?: string
+  loading?: boolean
+  autofocus?: boolean
+  accept?: string
+}
+
+export const Input = ({
   register,
   type = 'text',
   label,
   error,
-
   required,
   placeholder,
   disabled,
   className,
-
-  onChange: onChangeInput,
-  onKeyDown: onKeyDownInput,
+  onChange,
   loading,
   autofocus,
   ...props
-}) => {
+}: Props) => {
   const [currentType] = useState(type === 'text' ? 'text' : type)
 
   return (
@@ -50,12 +63,8 @@ export const Input: FC<InputProps> = ({
             autoComplete="new-password"
             {...register}
             onChange={(e) => {
-              onChangeInput?.(e)
+              onChange?.(e)
               register?.onChange?.(e)
-            }}
-            onKeyDown={(e) => {
-              onKeyDownInput?.(e)
-              register?.onChange(e)
             }}
             {...props}
           />

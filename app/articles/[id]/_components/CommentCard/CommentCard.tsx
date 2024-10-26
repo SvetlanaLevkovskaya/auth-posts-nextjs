@@ -34,7 +34,7 @@ export const CommentCard = ({ comment, articleId }: { comment: Comment; articleI
     setCurrentComment(comment)
   }, [comment])
 
-  const handleContentUpdated = async (data: CommentFormData) => {
+  const handleCommentUpdate = async (data: CommentFormData) => {
     try {
       await apiClientService.updateCommentContent(articleId, currentComment.id, {
         content: data.content,
@@ -104,7 +104,7 @@ export const CommentCard = ({ comment, articleId }: { comment: Comment; articleI
     }
   }
 
-  const handleReply = async (data: CommentFormData) => {
+  const handleCommentReply = async (data: CommentFormData) => {
     setIsReplyingLoading(true)
     try {
       await apiClientService.addCommentToArticle(articleId, {
@@ -148,7 +148,7 @@ export const CommentCard = ({ comment, articleId }: { comment: Comment; articleI
     }
   }
 
-  const onDelete = async () => {
+  const handleCommentDelete = async () => {
     setIsDeletingLoading(true)
     try {
       await apiClientService.deleteCommentById(articleId, currentComment.id)
@@ -169,7 +169,7 @@ export const CommentCard = ({ comment, articleId }: { comment: Comment; articleI
       {isEditing ? (
         <CommentEditForm
           initialContent={currentComment.content}
-          onSubmit={handleContentUpdated}
+          onSubmit={handleCommentUpdate}
           onCancel={() => setIsEditing(false)}
         />
       ) : (
@@ -198,7 +198,7 @@ export const CommentCard = ({ comment, articleId }: { comment: Comment; articleI
                 color="grey"
                 size="s"
                 disabled={isDeletingLoading}
-                onClick={onDelete}
+                onClick={handleCommentDelete}
                 className="mt-2 mb-2"
               >
                 Delete
@@ -209,7 +209,7 @@ export const CommentCard = ({ comment, articleId }: { comment: Comment; articleI
       )}
 
       {isReplying && !isEditing && (
-        <CommentReplyForm onSubmit={handleReply} onCancel={() => setIsReplying(false)} />
+        <CommentReplyForm onSubmit={handleCommentReply} onCancel={() => setIsReplying(false)} />
       )}
 
       {currentComment?.children?.length > 0 && (

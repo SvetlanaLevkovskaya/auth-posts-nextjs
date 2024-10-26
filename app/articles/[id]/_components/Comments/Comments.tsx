@@ -48,12 +48,12 @@ export const Comments = ({ articleId }: { articleId: number }) => {
       customToastSuccess('Комментарий успешно добавлен!')
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        customToastError(error.response.data?.detail || 'Ошибка при добавлении комментария')
+        customToastError(error.response.data?.detail ||  error.response.data.content[0])
       }
     }
   }
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLFormElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSubmit(handleAddComment)()
@@ -67,6 +67,7 @@ export const Comments = ({ articleId }: { articleId: number }) => {
       <form
         ref={formRef}
         onSubmit={handleSubmit(handleAddComment)}
+        onKeyDown={handleKeyDown}
         className="flex items-start gap-4 mb-4"
       >
         <Input
@@ -74,7 +75,6 @@ export const Comments = ({ articleId }: { articleId: number }) => {
           placeholder="Write your comment..."
           error={errors.content?.message}
           className="bg-gray-3 text-white flex-grow rounded-md"
-          onKeyDown={handleKeyDown}
         />
         <Button disabled={isSubmitting} size="m" color="neon" className="mt-2">
           Add comment

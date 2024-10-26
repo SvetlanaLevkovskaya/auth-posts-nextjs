@@ -6,9 +6,15 @@ import { Button, TextArea } from '@/ui/index'
 import { CommentFormData } from '@/types'
 
 
-export const CommentEditForm = ({ initialContent, onSubmit, onCancel } : {  initialContent: string
+export const CommentEditForm = ({
+  initialContent,
+  onSubmit,
+  onCancel,
+}: {
+  initialContent: string
   onSubmit: (data: CommentFormData) => void
-  onCancel: () => void}) => {
+  onCancel: () => void
+}) => {
   const {
     register,
     handleSubmit,
@@ -17,7 +23,7 @@ export const CommentEditForm = ({ initialContent, onSubmit, onCancel } : {  init
     defaultValues: { content: initialContent },
   })
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLFormElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSubmit(onSubmit)()
@@ -25,12 +31,8 @@ export const CommentEditForm = ({ initialContent, onSubmit, onCancel } : {  init
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <TextArea
-        register={register('content')}
-        onKeyDown={handleKeyDown}
-        error={errors.content?.message}
-      />
+    <form onSubmit={handleSubmit(onSubmit)} onKeyDown={handleKeyDown}>
+      <TextArea register={register('content')} error={errors.content?.message} />
       <div className="flex justify-end gap-2 mt-2 mb-2">
         <Button color="neon" size="m" disabled={isSubmitting}>
           Save

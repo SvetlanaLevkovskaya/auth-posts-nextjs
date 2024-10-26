@@ -21,7 +21,7 @@ export const CommentReplyForm = ({
     defaultValues: { content: '' },
   })
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLFormElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSubmit(onSubmit)()
@@ -29,12 +29,8 @@ export const CommentReplyForm = ({
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mt-2">
-      <TextArea
-        register={register('content')}
-        onKeyDown={handleKeyDown}
-        error={errors.content?.message}
-      />
+    <form onSubmit={handleSubmit(onSubmit)} onKeyDown={handleKeyDown} className="mt-2">
+      <TextArea register={register('content')} error={errors.content?.message} />
       <div className="flex justify-end gap-2 mt-2 mb-2">
         <Button color="neon" size="m" disabled={isSubmitting}>
           Reply

@@ -1,28 +1,28 @@
 'use client'
 
-import type { FC, MouseEventHandler, PropsWithChildren } from 'react'
+import type { MouseEventHandler, PropsWithChildren } from 'react'
 
 import clsx from 'clsx'
 
 import styles from './Button.module.scss'
 
 
-type ColorType = 'neon' | 'purple' | 'white' | 'grey'
+type ColorType = 'neon' | 'purple' | 'white' | 'grey' | 'default'
 
 type SizeType = 'xxl' | 'xl' | 'l' | 'm' | 's' | 'xs'
 
-interface ButtonProps extends PropsWithChildren {
+interface Props extends PropsWithChildren {
   onClick?: MouseEventHandler<HTMLButtonElement>
   color?: ColorType
   size?: SizeType
   type?: 'square' | 'circle'
-  hoverColor?: 'purple' | 'neon' | 'grey'
-  active?: 'purple' | 'neon' | 'grey'
+  hoverColor?: ColorType
+  active?: ColorType
   disabled?: boolean
   className?: string
 }
 
-export const Button: FC<ButtonProps> = ({
+export const Button = ({
   color = 'default',
   size = 'l',
   type,
@@ -30,7 +30,7 @@ export const Button: FC<ButtonProps> = ({
   onClick,
   className,
   children,
-}) => {
+}: Props) => {
   return (
     <button
       className={clsx(

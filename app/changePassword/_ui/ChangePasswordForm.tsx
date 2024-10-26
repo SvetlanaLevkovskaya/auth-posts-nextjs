@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { KeyboardEvent, useRef } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -46,17 +46,31 @@ export const ChangePasswordForm = () => {
       if (axios.isAxiosError(error)) {
         if (error.response) {
           customToastError(
-            error.response.data?.old_password?.[0] || error.response.data?.password?.[0]
+            error.response.data?.old_password?.[0] ||
+              error.response.data?.password?.[0] ||
+              error.response.data?.detail
           )
         }
       }
     }
   }
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSubmit(onSubmit)()
+    }
+  }
+
   return (
     <div className="flex-center-center min-h-screen">
       <div className="w-full max-w-md p-8 bg-white shadow-md rounded-md">
-        <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <form
+          ref={formRef}
+          onKeyDown={handleKeyDown}
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-5"
+        >
           <Input
             register={register('old_password')}
             placeholder="Old password"
