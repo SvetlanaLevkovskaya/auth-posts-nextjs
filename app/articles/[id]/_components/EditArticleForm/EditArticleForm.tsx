@@ -36,11 +36,9 @@ export const EditArticleForm = () => {
     clearErrors,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<ArticleFormData>({
-    resolver: yupResolver(editArticleValidationSchema),
-  })
+  } = useForm<ArticleFormData>({ resolver: yupResolver(editArticleValidationSchema) })
 
-  const { field } = useController({ control, name: 'image' })
+  const { field } = useController({ name: 'image', control })
 
   useEffect(() => {
     if (article) {
@@ -133,7 +131,7 @@ export const EditArticleForm = () => {
                   onClick={handleDeleteImage}
                   color="white"
                   size="xs"
-                  className="absolute top-0 right-0 p-1"
+                  className="absolute top-0 right-0"
                 >
                   <XMarkIcon className="h-5 w-5 text-gray-2" />
                 </Button>

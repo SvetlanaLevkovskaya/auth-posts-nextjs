@@ -92,5 +92,5 @@ export type CommentFormData = {
 export interface ArticleFormData {
   title: string
   content: string
-  image?: FileList | null
+  image?: string
 }

@@ -18,10 +18,7 @@
     }
 
     &::-webkit-file-upload-button {
-      @apply text-gray-4 bg-gray-3 border-none rounded-md pr-2 px-4 pl-0 mr-2 ;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-
+      @apply text-gray-4 bg-gray-3 border-none rounded-md pr-2 px-4 pl-0 mr-2 hover:text-gray-5 transition-all2 cursor-pointer;
     }
   }
 

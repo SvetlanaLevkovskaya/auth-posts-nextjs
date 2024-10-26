@@ -17,5 +17,7 @@ export const login = (username: string, password: string) => {
 export const logout = () => {
   Cookies.remove('username')
   Cookies.remove('password')
+  Cookies.remove('access_token')
+  Cookies.remove('refresh_token')
   userStore.set({ username: null, password: null })
 }
