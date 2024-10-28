@@ -32,7 +32,7 @@ export const ImageWithFallback = (props: Props): ReactElement => {
     setImageState((prev) => ({ ...prev, isLoaded: true }))
   }
 
-  const handleError = ({ currentTarget }:SyntheticEvent<HTMLImageElement>) => {
+  const handleError = ({ currentTarget }: SyntheticEvent<HTMLImageElement>) => {
     currentTarget.onerror = null
     setImageState({
       url: notAvailable?.src,

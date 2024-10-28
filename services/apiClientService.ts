@@ -3,16 +3,16 @@ import instanceAxios from '@/services/axiosInstance'
 import { ApiRoutes } from '@/lib/api/routes'
 import {
   Article,
+  ChangePasswordDto,
   ChangePasswordFormData,
-  ChangePasswordResponse,
   Comment,
   CommentFormData,
-  CreateAndUpdateArticleResponse,
-  CreateAndUpdateCommentResponse,
+  CreateAndUpdateArticleDto,
+  CreateAndUpdateCommentDto,
+  LoginDto,
   LoginFormData,
-  LoginResponse,
+  RegistrationDto,
   RegistrationRequest,
-  RegistrationResponse,
 } from '@/types'
 
 export const apiClientService = {
@@ -30,19 +30,15 @@ export const apiClientService = {
     return response.data
   },
 
-  createArticle: async (data: FormData): Promise<CreateAndUpdateArticleResponse> => {
-    const response = await instanceAxios.post<CreateAndUpdateArticleResponse>(
-      ApiRoutes.articles,
-      data,
-      {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      }
-    )
+  createArticle: async (data: FormData): Promise<CreateAndUpdateArticleDto> => {
+    const response = await instanceAxios.post<CreateAndUpdateArticleDto>(ApiRoutes.articles, data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
     return response.data
   },
 
-  updateArticle: async (id: number, data: FormData): Promise<CreateAndUpdateArticleResponse> => {
-    const response = await instanceAxios.put<CreateAndUpdateArticleResponse>(
+  updateArticle: async (id: number, data: FormData): Promise<CreateAndUpdateArticleDto> => {
+    const response = await instanceAxios.put<CreateAndUpdateArticleDto>(
       `${ApiRoutes.article}${id}/`,
       data,
       {
@@ -62,8 +58,8 @@ export const apiClientService = {
   addCommentToArticle: async (
     articleId: string | number,
     data: CommentFormData
-  ): Promise<CreateAndUpdateCommentResponse> => {
-    const response = await instanceAxios.post<CreateAndUpdateCommentResponse>(
+  ): Promise<CreateAndUpdateCommentDto> => {
+    const response = await instanceAxios.post<CreateAndUpdateCommentDto>(
       `${ApiRoutes.articles}${articleId}/comments/`,
       data
     )
@@ -74,8 +70,8 @@ export const apiClientService = {
     articleId: string | number,
     commentId: number,
     data: CommentFormData
-  ): Promise<CreateAndUpdateCommentResponse> => {
-    const response = await instanceAxios.put<CreateAndUpdateCommentResponse>(
+  ): Promise<CreateAndUpdateCommentDto> => {
+    const response = await instanceAxios.put<CreateAndUpdateCommentDto>(
       `${ApiRoutes.articles}${articleId}/comments/${commentId}/`,
       data
     )
@@ -86,24 +82,18 @@ export const apiClientService = {
     await instanceAxios.delete(`${ApiRoutes.articles}${articleId}/comments/${commentId}/`)
   },
 
-  login: async (data: LoginFormData): Promise<LoginResponse> => {
-    const response = await instanceAxios.post<LoginResponse>(`${ApiRoutes.token}`, data)
+  login: async (data: LoginFormData): Promise<LoginDto> => {
+    const response = await instanceAxios.post<LoginDto>(`${ApiRoutes.token}`, data)
     return response.data
   },
 
-  registration: async (data: RegistrationRequest): Promise<RegistrationResponse> => {
-    const response = await instanceAxios.post<RegistrationResponse>(
-      `${ApiRoutes.registration}`,
-      data
-    )
+  registration: async (data: RegistrationRequest): Promise<RegistrationDto> => {
+    const response = await instanceAxios.post<RegistrationDto>(`${ApiRoutes.registration}`, data)
     return response.data
   },
 
   changePassword: async (data: ChangePasswordFormData): Promise<{ success: boolean }> => {
-    const response = await instanceAxios.put<ChangePasswordResponse>(
-      `${ApiRoutes.changePassword}`,
-      data
-    )
+    const response = await instanceAxios.put<ChangePasswordDto>(`${ApiRoutes.changePassword}`, data)
     const { Success: success } = response.data
     return { success }
   },

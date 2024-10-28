@@ -14,7 +14,7 @@ interface User {
   email: string
 }
 
-export interface RegistrationResponse {
+export interface RegistrationDto {
   user: User
 }
 
@@ -37,7 +37,7 @@ export type LoginFormData = {
   password: string
 }
 
-export interface LoginResponse {
+export interface LoginDto {
   refresh: string
   access: string
 }
@@ -48,7 +48,7 @@ export interface ChangePasswordFormData {
   confirmed_password: string
 }
 
-export interface ChangePasswordResponse {
+export interface ChangePasswordDto {
   Success: boolean
 }
 
@@ -69,7 +69,7 @@ export interface Article {
   image: string
 }
 
-export type CreateAndUpdateArticleResponse = Pick<Article, 'title' | 'content' | 'image'>
+export type CreateAndUpdateArticleDto = Pick<Article, 'title' | 'content' | 'image'>
 
 
 export interface Comment {
@@ -82,7 +82,7 @@ export interface Comment {
   children: Comment[]
 }
 
-export type CreateAndUpdateCommentResponse = Pick<Comment, 'content' | 'parent'>
+export type CreateAndUpdateCommentDto = Pick<Comment, 'content' | 'parent'>
 
 export type CommentFormData = {
   content: string

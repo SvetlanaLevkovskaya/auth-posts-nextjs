@@ -165,60 +165,62 @@ export const CommentCard = ({ comment, articleId }: { comment: Comment; articleI
   }
 
   return (
-    <li className="bg-white p-4 rounded-lg shadow-lg border min-w-72 mb-2">
-      {isEditing ? (
-        <CommentEditForm
-          initialContent={currentComment.content}
-          onSubmit={handleCommentUpdate}
-          onCancel={() => setIsEditing(false)}
-        />
-      ) : (
-        <>
-          <p className="mt-2 text-gray-3 break-words" onClick={() => setIsEditing(true)}>
-            {currentComment?.content}
-          </p>
-          <small className="text-gray-4 block mt-2">
-            {currentComment?.author?.username || username}
-          </small>
-          <div className="flex gap-1.5">
-            <Button
-              color="grey"
-              size="s"
-              disabled={isReplyingLoading}
-              onClick={(e) => {
-                e.stopPropagation()
-                setIsReplying(!isReplying)
-              }}
-              className="mt-2 mb-2"
-            >
-              Reply
-            </Button>
-            {isAuthor && (
+    <>
+      <li className="bg-gray-5 rounded-lg mb-2 p-2 pl-4 pb-0">
+        {isEditing ? (
+          <CommentEditForm
+            initialContent={currentComment.content}
+            onSubmit={handleCommentUpdate}
+            onCancel={() => setIsEditing(false)}
+          />
+        ) : (
+          <div className='border-b border-b-gray-2'>
+            <p className="mt-2 text-gray-3 break-words" onClick={() => setIsEditing(true)}>
+              {currentComment?.content}
+            </p>
+            <small className="text-gray-4 block mt-2">
+              {currentComment?.author?.username || username}
+            </small>
+            <div className="flex gap-1.5">
               <Button
                 color="grey"
                 size="s"
-                disabled={isDeletingLoading}
-                onClick={handleCommentDelete}
-                className="mt-2 mb-2"
+                disabled={isReplyingLoading}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setIsReplying(!isReplying)
+                }}
+                className="mt-2 mb-4"
               >
-                Delete
+                Reply
               </Button>
-            )}
+              {isAuthor && (
+                <Button
+                  color="grey"
+                  size="s"
+                  disabled={isDeletingLoading}
+                  onClick={handleCommentDelete}
+                  className="mt-2 mb-4"
+                >
+                  Delete
+                </Button>
+              )}
+            </div>
           </div>
-        </>
-      )}
+        )}
 
-      {isReplying && !isEditing && (
-        <CommentReplyForm onSubmit={handleCommentReply} onCancel={() => setIsReplying(false)} />
-      )}
+        {isReplying && !isEditing && (
+          <CommentReplyForm onSubmit={handleCommentReply} onCancel={() => setIsReplying(false)} />
+        )}
 
-      {currentComment?.children?.length > 0 && (
-        <CommentChildren
-          key={currentComment.id}
-          childrenComments={currentComment.children}
-          articleId={articleId}
-        />
-      )}
-    </li>
+        {currentComment?.children?.length > 0 && (
+          <CommentChildren
+            key={currentComment.id}
+            childrenComments={currentComment.children}
+            articleId={articleId}
+          />
+        )}
+      </li>
+    </>
   )
 }
